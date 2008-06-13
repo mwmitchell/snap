@@ -1,4 +1,5 @@
-Welcome to the snap wiki!
+Welcome to the Snap wiki!
+
 Snap is a Ruby, DSL based framework for creating RESTful web applications. It adheres to the Ruby Rack specification.
 
 Snap treats every fragment in a URL as a "context". Each context can be mapped to a block or another Snap enabled module. For example, a URL of:
