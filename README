@@ -1,6 +1,6 @@
 =Snap
 
-Snap is a ruby framework for creating `RESTful` web applications. Using the [Rack gem](http://rack.rubyforge.org/ "Rack: a Ruby Webserver Interface"), it's designed to be flexible, fast and easy to understand.
+Snap is a ruby framework for creating `RESTful` web applications. Using Rack: http://rack.rubyforge.org - "Rack: a Ruby Webserver Interface", it's designed to be flexible, fast and easy to understand.
  
 ==Examples
  
