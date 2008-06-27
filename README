@@ -28,8 +28,6 @@ Snap is a ruby framework for creating `RESTful` web applications. Using the [Rac
 
 ================================================================
 
-Welcome to the Snap wiki!
- 
 Snap is a Ruby, DSL based framework for creating RESTful web applications. It adheres to the Ruby Rack specification.
  
 Snap treats every fragment in a URL as a "context". Each context can be mapped to a block or another Snap enabled module. For example, a URL of:
@@ -79,7 +77,7 @@ module SeriousApp
   
   class Contact # A delegate/sub-app
     
-    include Snap::Context::Delegate
+    extend Snap::App
     
     build do
       before :post do
@@ -98,7 +96,7 @@ module SeriousApp
   
   class Root
     
-    include Snap::App
+    extend Snap::App
     
     build do
       get{'A simple GET to /'}
@@ -117,7 +115,7 @@ module SeriousApp
       end
       
       # forwarding /contact to the Contact class
-      map 'contact', {}, Contact
+      map 'contact' { use Contact }
     end
     
   end
