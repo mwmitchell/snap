@@ -22,4 +22,6 @@ module Snap
   autoload :Context, 'snap/context'
   autoload :Request, 'snap/request'
   autoload :Demo, 'snap/demo'
+  autoload :Config, 'snap/config'
+  autoload :HashBlock, 'snap/hash_block'
 end

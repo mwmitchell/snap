@@ -19,6 +19,7 @@ module Snap::App
   #
   #
   def self.extended(base)
+    
     base.class_eval do
       
       #
@@ -26,6 +27,7 @@ module Snap::App
       #
       include MonitorMixin
       
+      attr_accessor :config
       attr_accessor :request
       attr_accessor :response
       
@@ -38,10 +40,17 @@ module Snap::App
           @response = Rack::Response.new
           c=self.class.root.resolve(@request.path_info_slices, self)
           result = c.execute if c
+          response.finish
         end
       end
       
     end
+  end
+  
+  class Base
+    
+    extend Snap::App
+    
   end
   
 end

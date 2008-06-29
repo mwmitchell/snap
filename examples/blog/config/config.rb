@@ -8,7 +8,7 @@ environments do
     reload_code true
     database do
       host :localhost
-      database: :todo_development
+      database :todo_development
       username ''
       password ''
     end
@@ -18,7 +18,7 @@ environments do
     reload_code false
     database do
       host :localhost
-      database: :todo_production
+      database :todo_production
       username ''
       password ''
     end

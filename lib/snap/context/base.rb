@@ -85,6 +85,8 @@ class Snap::Context::Base
   #
   #
   def method_missing(m,*a,&block)
+    puts "METHOD MISSING #{m.inspect}"
+    puts "APP IS #{@app} (should not be a context::base)"
     @app.send(m,*a,&block)
   end
   
@@ -147,7 +149,10 @@ class Snap::Context::Base
       instance_eval &@block
     end
     
-    return self if slices.empty? and can?(method, env)
+    #
+    # "and can?(method, env)" -> This seemed to allow falling back to an action that is a parent
+    #
+    return self if slices.empty?# and can?(method, env)
     
     matching_child=nil
     children.each do |c|

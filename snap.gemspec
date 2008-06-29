@@ -19,6 +19,7 @@ spec=Gem::Specification.new do |s|
     lib/snap/demo.rb
     lib/snap/request.rb
     lib/snap/context/base.rb
+    lib/snap/context/actions.rb
     lib/snap/context/events.rb
     lib/snap/context/matcher.rb
   )
