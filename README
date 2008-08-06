@@ -1,0 +1,21 @@
+= Snap - REST made easy
+
+== Example
+c = Snap::Context::Base.new('') do
+  before do
+    response.write '->'
+  end
+  after do
+    response.write '<-'
+  end
+  get do
+    response.write 'Testing...'
+  end
+  get 'about' do
+    response.write 'About Schwaggles Co.'
+  end
+end
+
+response=Rack::Response.new
+c.execute(Snap::Request.new(Rack::MockRequest.env_for('/about')), response)
+puts response.finish.inspect
