@@ -1,7 +1,7 @@
 spec=Gem::Specification.new do |s|
   s.name = "snap"
   s.version = '0.6.0'
-  s.date = "2008-08-05"
+  s.date = "2008-08-06"
   s.summary = "Snap - a minimalist framework for creating RESTful web applications"
   s.email = "goodieboy@gmail.com"
   s.homepage = "http://github.com/mwmitchell/snap"
