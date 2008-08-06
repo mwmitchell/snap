@@ -21,7 +21,7 @@ end
 
 post{response.write "Posted! Go <a href='#{path}'>back</a>..."}
 
-map 'action' do
+map 'about' do
   before {response.write '<h1>ABOUT WITH ID ' + self.value + '</h1>'}
   get{response.write("views/about"*10000)}
 end

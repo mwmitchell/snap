@@ -16,7 +16,7 @@ module Snap::Context::Events
     after_blocks[action]=[options,block]
   end
   
-  def execute_before_and_after_blocks(method, options, &block)
+  def execute_before_and_after_blocks(method, options={}, &block)
     execute_before_blocks method, options
     yield
     execute_after_blocks method, options

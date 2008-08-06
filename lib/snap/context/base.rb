@@ -57,6 +57,10 @@ class Snap::Context::Base
     children<<usable_app
   end
   
+  def snap(klass, *args, &block)
+    klass.new(*args, &block)
+  end
+  
   #
   # Define a new sub-context block
   # pattern can be a string, a symbol or a hash
@@ -70,34 +74,32 @@ class Snap::Context::Base
   #
   #
   #
-  def find_action(method, env={})
-    actions.detect{ |a| a[0] == method and options_match?(a[1], env)}
+  def find_action(method)
+    actions.detect{|a|a[0] == method}
   end
   
   #
   #
   #
-  def can?(*args)
-    ! find_action(*args).nil?
+  def can?(method)
+    ! find_action(method).nil?
   end
   
   #
   #
   #
-  def method_missing(m,*a,&block)
-    puts "METHOD MISSING #{m.inspect}"
-    puts "APP IS #{@app} (should not be a context::base)"
-    @app.send(m,*a,&block)
+  def method_missing(m,*args,&block)
+    @app.send(m,*args,&block)
   end
   
   #
   #
   #
-  def execute(method=request.m, env=request.env)
-    a=find_action(method,env)
+  def execute(method=request.m)
+    a=find_action(method)
     result=nil
     unless a.nil?
-      execute_before_and_after_blocks(method, env){result=instance_eval &a[2]}
+      execute_before_and_after_blocks(method){result=instance_eval &a[2]}
     end
     result
   end
@@ -109,7 +111,6 @@ class Snap::Context::Base
     @app=app
     
     method=app.request.m
-    env=app.request.env
     
     # 
     # must clone the slices; in some cases we need to climb back up the context stack
@@ -125,12 +126,7 @@ class Snap::Context::Base
     # then extract the value
     val = match?(@pattern,slices.first)
     
-    return unless val    
-    
-    #
-    # now make sure that the options can match the env
-    #
-    return unless options_match?(@options, env)
+    return unless val
     
     # if the returned value was a hash, merge it into the apps request.param hash
     app.request.params.merge!(val) if val.is_a?(Hash)
