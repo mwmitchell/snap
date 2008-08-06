@@ -2,7 +2,7 @@ spec=Gem::Specification.new do |s|
   s.name = "snap"
   s.version = '0.6.0'
   s.date = "2008-08-05"
-  s.summary = "Snap is a Ruby, DSL based framework for creating RESTful web applications."
+  s.summary = "Snap - a minimalist framework for creating RESTful web applications"
   s.email = "goodieboy@gmail.com"
   s.homepage = "http://github.com/mwmitchell/snap"
   s.description = s.summary
@@ -11,6 +11,7 @@ spec=Gem::Specification.new do |s|
   s.files = %W(
 README
 LICENSE
+bin/snap
 lib/core_ext.rb
 lib/snap.rb
 lib/snap/action.rb
@@ -25,8 +26,9 @@ lib/snap/renderers.rb
 lib/snap/request.rb
 lib/snap/response_helpers.rb
 )
+  s.require_paths = ['lib']
   s.test_files = []
-  s.rdoc_options = ["--main", "README"]
+  s.rdoc_options = ['--main', 'README']
   s.extra_rdoc_files = ['README', 'LICENSE']
-  s.add_dependency("rack", ["0.3.0"])
+  s.add_dependency('rack', ['0.3.0'])
 end
