@@ -31,7 +31,7 @@ module Snap::Context
     end
     
     def method_missing(m,*args,&block)
-      parent.send(m,*args,&block) if @parent
+      parent.send(m,*args,&block)
     end
     
     def use(klass, *args)

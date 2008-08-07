@@ -1,3 +1,14 @@
+
+extend Snap::Renderers::Erubis
+
+map 'erb' do
+  get do
+    @title='Erubis Example'
+    @body='Erubis is a fast, secure, and very extensible implementation of eRuby. It has the following features.'
+    render 'pages/erb'
+  end
+end
+
 before :except=>:home do
   format.html{response.write '<ul><li>'}
   format.xml{response.write '<root>'}

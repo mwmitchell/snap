@@ -6,4 +6,4 @@ require 'core_ext'
 
 module Snap; end
 
-%W(rack_runner response_helpers request negotiator event loader action context/action_methods context/hooks context).each{|p|require "snap/#{p}"}
+%W(rack_runner response_helpers request negotiator event loader action context/action_methods context/hooks context renderers renderers/erubis).each{|p|require "snap/#{p}"}

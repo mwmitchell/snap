@@ -1,5 +1,9 @@
 module Snap::Loader
   def load(file)
-    instance_eval File.read(file)
+    begin
+      instance_eval File.read(file)
+    rescue
+      raise "Error in #{file}: #{$!}"
+    end
   end
 end
