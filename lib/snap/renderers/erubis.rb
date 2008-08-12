@@ -82,9 +82,14 @@ module ::Snap::Renderers
       data.each do |k,v|
         context.instance_variable_set("@#{k}", v)
       end
-
+      context.instance_eval do
+        def path(name, *args)
+          
+        end
+      end
+      
       template = File.read("views/#{template}.#{request.format}.erb")
-      response.write ::Erubis::BlockAwareEruby.new(nil, :trim=>false).process(template, context)
+      response.body = ::Erubis::BlockAwareEruby.new(nil, :trim=>false).process(template, context)
     end
   end
   

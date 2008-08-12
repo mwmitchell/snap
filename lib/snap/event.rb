@@ -10,8 +10,12 @@ module Snap::Event
     attr_accessor :request
     attr_accessor :response
     
-    def initialize(options=nil, &block)
-      @options,@block=options,block
+    def initialize(context, options=nil, &block)
+      @context,@options,@block=context,options,block
+    end
+    
+    def method_missing(m,*args,&block)
+      @context.send(m,*args,&block) if @context
     end
     
     def execute(req, res)

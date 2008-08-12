@@ -1,3 +1,4 @@
+require 'rubygems'
 gem 'dm-core'
 require 'dm-core'
 

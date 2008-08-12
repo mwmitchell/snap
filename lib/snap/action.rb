@@ -5,7 +5,6 @@ class Snap::Action < Snap::Event::Base
   attr_reader :context, :request_method, :name, :path, :options, :block, :full_path
   
   def initialize(context, request_method, path='', options={}, &block)
-    @context=context
     @request_method=request_method
     @name=nil
     @path=path
@@ -14,7 +13,7 @@ class Snap::Action < Snap::Event::Base
     elsif path.is_a?(Symbol)
       @name,@path=path,''
     end
-    super options, &block
+    super context, options, &block
   end
   
   def local_values
@@ -73,10 +72,10 @@ class Snap::Action < Snap::Event::Base
   
   def execute
     context.execute_before_and_after_blocks(self) do
-      content = super(request, response)
+      super(request, response)
       if @formatter
         format_block=@formatter.resolve(request.format)
-        content = instance_eval &format_block if format_block
+        instance_eval &format_block if format_block
       end
     end
   end

@@ -10,11 +10,11 @@ module Snap::Context::Hooks
   # before :except=>[:action1, :action2]
   #
   def before(options=nil, &block)
-    before_blocks << Snap::Event::Base.new(options, &block)
+    before_blocks << Snap::Event::Base.new(self,options, &block)
   end
   
   def after(options=nil, &block)
-    after_blocks << Snap::Event::Base.new(options,&block)
+    after_blocks << Snap::Event::Base.new(self,options,&block)
   end
   
   def execute_before_and_after_blocks(action, &block)

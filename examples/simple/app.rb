@@ -1,11 +1,11 @@
 
 extend Snap::Renderers::Erubis
 
-map 'erb' do
+map :erubis=>'renderer/:type' do
   get do
-    @title='Erubis Example'
+    @title="#{local_params[:type].upcase} Example"
     @body='Erubis is a fast, secure, and very extensible implementation of eRuby. It has the following features.'
-    render 'pages/erb'
+    render "pages/#{context.name}"
   end
 end
 
@@ -19,7 +19,7 @@ after :except=>:home do
   format.xml{response.write '</root>'}
 end
 
-get :home do
+get :home=>'' do
   format.html{response.write 'hello'}
 end
 

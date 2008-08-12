@@ -1,3 +1,24 @@
+extend Snap::Renderers::Erubis
+
+after do
+  format.html do
+    render 'shared/layout', :content=>response.body
+  end
+end
+
+get do
+  format.html{render 'pages/index'}
+end
+
+get :assets=>'assets' do
+  format.js do
+    
+  end
+  format.css do
+    
+  end
+end
+
 map :posts=>'posts' do
   
   get do
