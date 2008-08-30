@@ -5,7 +5,6 @@ module Snap::Event
     include Snap::RequestHelpers
     include Snap::ResponseHelpers
     include Snap::Configurable
-    include Snap::Negotiator
     
     attr_reader :options
     attr_reader :block
@@ -24,7 +23,7 @@ module Snap::Event
       self.request=req
       self.response=res
       result = instance_eval &@block
-      if negotiator and f = negotiator.resolve(request.format)
+      if format_mapper and f = format_mapper.resolve(request.format)
         result = instance_eval &f if f
       end
       result

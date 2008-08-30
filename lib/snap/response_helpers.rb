@@ -1,5 +1,30 @@
 module Snap::ResponseHelpers
   
+  class FormatMapper
+    
+    def initialize
+      @formats={}
+    end
+    
+    def method_missing(m,&block)
+      # check with mime-types here...
+      @formats[m]=block
+    end
+    
+    def resolve(format)
+      @formats[format]
+    end
+    
+  end
+  
+  def format_mapper
+    @format_mapper||=FormatMapper.new
+  end
+  
+  def format
+    format_mapper
+  end
+  
   def redirect(path, *args)
     response.status=302
     headers 'Location' => path

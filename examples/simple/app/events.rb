@@ -1,7 +1,7 @@
 context '/' do
   
   before do
-    'the grand-daddy before'
+    format.xml {'the grand-daddy before'}
   end
   
   before do

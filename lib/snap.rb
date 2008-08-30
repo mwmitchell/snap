@@ -7,12 +7,9 @@ require 'rubygems'
 require 'rack'
 require 'core_ext'
 
-
 module Snap
   
-  class << self
-    attr :config
-  end
+  class << self; attr :config end
   
   def self.config
     @config ||= Snap::Config.new
@@ -35,11 +32,9 @@ end
   response_helpers
   request_helpers
   request
-  negotiator
   event
   action
   context/hooks
   context
-  renderer
-  renderer/erubis
+  view_helper
 ).each{|p|require "snap/#{p}"}
