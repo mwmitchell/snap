@@ -2,9 +2,9 @@ module Snap::Context
   
   class Base
     
-    include ActionMethods
-    include Hooks
-    include Snap::Loader
+    include Snap::RequestHelpers
+    include Snap::Configurable
+    include Snap::Context::Hooks
     
     attr_accessor :parent
     attr_reader :name, :path, :options, :block, :full_path
@@ -12,6 +12,14 @@ module Snap::Context
     
     # The matching action
     attr_reader :action
+    
+    %W(get post put delete head).each do |m|
+      class_eval <<-EOF
+        def #{m}(path='', options={}, &block)
+          add_action :#{m}, path, options, &block
+        end
+      EOF
+    end
     
     def initialize(path, options={}, parent=nil, &block)
       init(path, options, parent, &block)
@@ -30,6 +38,10 @@ module Snap::Context
       @block=block if block_given?
     end
     
+    def load_script(name)
+      instance_eval File.read(name) rescue raise "#{$!} - when loading #{name}"
+    end
+    
     def method_missing(m,*args,&block)
       parent.send(m,*args,&block)
     end
@@ -40,7 +52,7 @@ module Snap::Context
       children<<[klass, args] unless children.detect{|i|(i[0]==klass and i[1]==args)}
     end
     
-    def map(path, options={}, &block)
+    def context(path, options={}, &block)
       add_child path, options, &block
     end
     
@@ -72,12 +84,27 @@ module Snap::Context
     end
     
     def execute(request, response)
-      catch :halt do
-        @action=find_action(request, response)
-        if @action
-          @action.execute
+      halted_content = catch :halt do
+        run_safely do
+          @action=find_action(request, response)
+          response.write(@action.execute) if @action
         end
+        nil
       end
+      response.write halted_content if halted_content
+      response.finish
+    end
+    
+    def run_safely
+      if config.mutex
+        mutex.synchronize { yield }
+      else
+        yield
+      end
+    end
+    
+    def mutex
+      @@mutex ||= Mutex.new
     end
     
     def find_action(request, response, parent=nil)

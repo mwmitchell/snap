@@ -1,2 +1,5 @@
 require '../../lib/snap.rb'
-run Snap::RackRunner.new(Snap::Context::Base)
+
+run Snap::Initializer.new { |config|
+  config.view_paths << 'app/views'
+}

@@ -13,4 +13,8 @@ module Snap::ResponseHelpers
   
   alias :header :headers
   
+  def render
+    raise ':raise method NOT IMPLEMENTED'
+  end
+  
 end

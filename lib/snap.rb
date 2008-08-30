@@ -1,9 +1,45 @@
-lambda {|p|$:.unshift p unless $:.include?(p) or $:.include?(File.expand_path(p))}.call(File.dirname(__FILE__))
+lambda do |p|
+  $:.unshift p unless
+    $:.include?(p) or $:.include?(File.expand_path(p))
+end.call(File.dirname(__FILE__))
 
 require 'rubygems'
 require 'rack'
 require 'core_ext'
 
-module Snap; end
 
-%W(rack_runner response_helpers request negotiator event loader action context/action_methods context/hooks context renderers renderers/erubis).each{|p|require "snap/#{p}"}
+module Snap
+  
+  class << self
+    attr :config
+  end
+  
+  def self.config
+    @config ||= Snap::Config.new
+  end
+  
+  module Version
+    MAJOR = '0'
+    MINOR = '4'
+    REVISION = '0'
+    def self.combined
+      [MAJOR, MINOR, REVISION].join('.')
+    end
+  end
+end
+
+%W(
+  config
+  configurable
+  initializer
+  response_helpers
+  request_helpers
+  request
+  negotiator
+  event
+  action
+  context/hooks
+  context
+  renderer
+  renderer/erubis
+).each{|p|require "snap/#{p}"}

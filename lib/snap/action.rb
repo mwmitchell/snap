@@ -1,7 +1,5 @@
 class Snap::Action < Snap::Event::Base
   
-  include Snap::Loader
-  
   attr_reader :context, :request_method, :name, :path, :options, :block, :full_path
   
   def initialize(context, request_method, path='', options={}, &block)
@@ -71,13 +69,15 @@ class Snap::Action < Snap::Event::Base
   end
   
   def execute
-    context.execute_before_and_after_blocks(self) do
-      super(request, response)
+    content = context.execute_before_and_after_blocks(self) do
+      result = super(request, response)
       if @formatter
         format_block=@formatter.resolve(request.format)
-        instance_eval &format_block if format_block
+        result = instance_eval &format_block if format_block
       end
+      result
     end
+    return content.inspect
   end
   
 end

@@ -2,8 +2,10 @@ module Snap::Event
   
   class Base
     
-    include Snap::Negotiator
+    include Snap::RequestHelpers
     include Snap::ResponseHelpers
+    include Snap::Configurable
+    include Snap::Negotiator
     
     attr_reader :options
     attr_reader :block
@@ -21,10 +23,11 @@ module Snap::Event
     def execute(req, res)
       self.request=req
       self.response=res
-      instance_eval &@block
+      result = instance_eval &@block
       if negotiator and f = negotiator.resolve(request.format)
-        instance_eval &f if f
+        result = instance_eval &f if f
       end
+      result
     end
     
   end

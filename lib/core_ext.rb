@@ -29,7 +29,7 @@ class String
 end
 
 class Hash
- 
+  
   def deep_merge(hash)
     target = dup
     hash.keys.each do |key|
@@ -41,7 +41,7 @@ class Hash
     end
     target
   end
- 
+  
   def deep_merge!(second)
     second.each_pair do |k,v|
       if self[k].is_a?(Hash) and second[k].is_a?(Hash)
@@ -51,5 +51,5 @@ class Hash
       end
     end
   end
- 
+  
 end
