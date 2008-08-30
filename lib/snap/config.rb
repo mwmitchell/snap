@@ -1,10 +1,11 @@
 class Snap::Config
   
-  attr_reader :mutex, :view_paths
+  attr_reader :mutex, :view_paths, :default_renderer
   
   def initialize
-    @view_paths=[]
     @mutex=true
+    @view_paths=[]
+    @default_renderer = :erb
   end
   
 end

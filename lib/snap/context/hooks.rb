@@ -20,12 +20,17 @@ module Snap
       def after(options=nil, &block)
         after_blocks << Snap::Event::Base.new(self, options,&block)
       end
-  
+      
+      #
+      # Returns an array of responses from the before/after filters and action blocks:
+      # 
+      # [array_of_before_filter_responses, action_result_body, array_of_after_filter_response] 
+      # 
       def execute_before_and_after_blocks(action, &block)
         result = []
-        result << execute_before_blocks(action).flatten
+        result << execute_before_blocks(action)
         result << yield
-        result << execute_after_blocks(action).flatten
+        result << execute_after_blocks(action)
         result
       end
   
@@ -34,8 +39,8 @@ module Snap
       #
       def execute_before_blocks(action)
         result = []
-        result << parent.execute_before_blocks(action) if parent
-        result << eval_blocks(before_blocks, action)
+        result += parent.execute_before_blocks(action) if parent
+        result += eval_blocks(before_blocks, action)
         result
       end
   
@@ -44,8 +49,8 @@ module Snap
       #
       def execute_after_blocks(action)
         result = []
-        result = eval_blocks(after_blocks, action)
-        result << parent.execute_after_blocks(action) if parent
+        result += eval_blocks(after_blocks, action)
+        result += parent.execute_after_blocks(action) if parent
         result
       end
   
@@ -87,7 +92,7 @@ module Snap
             end
           end
         end # end eval_blocks
-        result
+        result.reject{|v|v.nil?}
       end
     
     end

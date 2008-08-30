@@ -23,7 +23,8 @@ context '/' do
   end
 
   get do
-    'This is the / action'
+    @title = 'Welcome!'
+    render 'pages/index'
   end
   
 end
