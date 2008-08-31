@@ -3,7 +3,7 @@ module Snap::Context
   class Base
     
     include Snap::RequestHelpers
-    include Snap::Configurable
+    include Snap::ConfigHelpers
     include Snap::Context::Hooks
     
     attr_accessor :parent
@@ -27,7 +27,7 @@ module Snap::Context
     
     def init(path, options={}, parent=nil, &block)
       @name=nil
-      @path=path
+      @path=URI.encode(path)
       if path.is_a?(Hash)
         @name,@path=path.keys.first, path.values.first
       elsif path.is_a?(Symbol)
@@ -84,14 +84,23 @@ module Snap::Context
     end
     
     def execute(request, response)
-      halted_content = catch :halt do
-        run_safely do
-          @action=find_action(request, response)
-          response.write(@action.execute) if @action
+      begin
+        halted_content = catch :halt do
+          run_safely do
+            @action=find_action(request, response)
+            response.write(@action.execute) if @action
+          end
+          nil
         end
-        nil
+        response.write halted_content if halted_content
+      rescue
+        if config.env == :production
+          response.status=500
+          response.body = ['Something has gone horribly wrong...']
+        else
+          raise $!
+        end
       end
-      response.write halted_content if halted_content
       response.finish
     end
     

@@ -31,6 +31,10 @@ module Snap::ResponseHelpers
     throw :halt, *args
   end
   
+  def stop(*args)
+    throw :halt, args
+  end
+  
   def headers(header = nil)
     response.headers.merge!(header) if header
     response.headers

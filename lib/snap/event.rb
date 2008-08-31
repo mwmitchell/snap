@@ -4,7 +4,7 @@ module Snap::Event
     
     include Snap::RequestHelpers
     include Snap::ResponseHelpers
-    include Snap::Configurable
+    include Snap::ConfigHelpers
     
     attr_reader :options
     attr_reader :block

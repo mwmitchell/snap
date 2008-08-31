@@ -23,11 +23,12 @@ module Snap
       [MAJOR, MINOR, REVISION].join('.')
     end
   end
+  
 end
 
 %W(
   config
-  configurable
+  config_helpers
   initializer
   response_helpers
   request_helpers

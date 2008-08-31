@@ -18,7 +18,7 @@ module Snap
       end
   
       def after(options=nil, &block)
-        after_blocks << Snap::Event::Base.new(self, options,&block)
+        after_blocks << Snap::Event::Base.new(self, options, &block)
       end
       
       #

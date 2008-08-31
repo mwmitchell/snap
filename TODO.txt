@@ -1,102 +1,13 @@
-Cleanup/refactor
-	Seems like there are too many mixins?
 The view handling needs a lot of help
-	how to make simple like Sinatra (steal?), but extendible?
-	Add generic ViewPaths class
-Implement PathMatcher and HashMatcher
-Do we really need core_ext.rb?
-	At very least... clean this up
-	don't think the String.trim is going to work with multiple chars
-	put newer version in below -> TEST THIS THING
-	
-put :render method in ResponseHelpers
-
-config.ru
-	
-	Use Rack::Builder
-	c = Context.new('/')
-	c.load_script 'app/events.rb'
-	run c
-
-Extending Snap::Event::Base seems like a bad idea
-
-	for now, don't do any mixin or inheritance
-
-###################
-# THIS NEEDS TEST #
-###################
-class String
-
-	%W(trim trim!).each do |m|
-	  define_method m do |*args|
-	    raise 'Characters argument missing' unless (chars=args.join(' '))
-	    p = [/^[#{chars}]+|[#{chars}]+$/, '']
-	    m[-1..-1] == '!' ? self.gsub!(*p) : self.gsub(*p)
-	  end
-	end
-
-	%W(dedup dedup!).each do |m|
-	  define_method m do |*args|
-	    raise 'Character argument missing' if args.nil?
-	    value=self
-	    args.each do |char|
-	      p = [/#{char}+/, char]
-	      m[-1..-1] == '!' ? self.gsub!(*p) : (value = self.gsub(*p))
-	    end
-	    value
-	  end
-	end
-
-	#
-	# replaces sets of duplicated characters with a single character
-	# removes starting and ending instances of the characters argument
-	# 
-	# puts 'testtktu'.cleanup('t', 'u') == 'estk'
-	# 
-	%W(cleanup cleanup!).each do |m|
-	  define_method m do |*args|
-	    m[-1] == '!' ? (trim!(*args) && dedup!(*args)) : (trim(*args).dedup(*args))
-	  end
-	end
-
-end
-
-#
-# FROM Sinatra
-#
-
-def mime(ext, type)
-  Rack::File::MIME_TYPES[ext.to_s] = type
-end
-
-class String
-
-  # Converts +self+ to an escaped URI parameter value
-  #   'Foo Bar'.to_param # => 'Foo%20Bar'
-  def to_param
-    URI.escape(self)
-  end
-  
-  # Converts +self+ from an escaped URI parameter value
-  #   'Foo%20Bar'.from_param # => 'Foo Bar'
-  def from_param
-    URI.unescape(self)
-  end
-  
-end
-
-class Hash
-  
-  def to_params
-    map { |k,v| "#{k}=#{URI.escape(v)}" }.join('&')
-  end
-  
-  def symbolize_keys
-    self.inject({}) { |h,(k,v)| h[k.to_sym] = v; h }
-  end
-  
-  def pass(*keys)
-    reject { |k,v| !keys.include?(k) }
-  end
-  
-end
+	Find way to register multiple renderers
+		
+		config.renderer[:erb] = lambda {|*options|
+			#
+		}
+		config.renderers[:haml] = lambda {|*options|
+			#
+		}
+		
+	Implement way of specifying which renderer to use within app
+		
+Implement generic PathMatcher and HashMatcher - maybe not?

@@ -6,6 +6,10 @@ module Snap
       @request.params(*args)
     end
     
+    def request
+      @request
+    end
+    
   end
   
 end
