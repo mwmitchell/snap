@@ -79,18 +79,27 @@ class Snap::Action < Snap::Event::Base
     context.send(m, *args, &block)
   end
   
-  def execute
+  #
+  # Returns an array of [pref_filter_content, action_content, post_filter_content]
+  # yields the action_content when it's actually executed
+  #
+=begin
+  def execute(&block)
     # execute the filters
-    content = context.execute_before_and_after_blocks(self) do
-      # now the before filters have executed... execute the action
+    context.execute_before_and_after_blocks(self) do
+      # now the :before filters have executed... execute the action
       result = super(request, response)
       if @formatter
         format_block=@formatter.resolve(request.format)
         result = instance_eval &format_block if format_block
       end
-      # return the result - the after filters will execute next...
+      # yield the result so the context can do something with it
+      yield result
+      # return the result here so the execute_before_and_after_blocks can properly store it
       result
+      # return the result - the after filters will execute next...
     end
   end
+=end
   
 end

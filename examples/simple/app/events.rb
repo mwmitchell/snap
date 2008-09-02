@@ -1,25 +1,31 @@
+before do
+  format.html do
+    response.write 'GLOBAL BEFORE' + '<hr/>'
+  end
+end
+
+after do
+  format.html do
+    response.write '<hr/> GLOBAL AFTER'
+  end
+end
+
+before do
+  if request.params['halt']
+    response.status = 500
+    response.write 'Halt!'
+    throw :halt
+  end
+end
+
 context '/' do
   
   before do
-    format.xml {'the grand-daddy before'}
-  end
-  
-  before do
-    if request.params['halt']
-      throw :halt, 'halting!'
-    end
-  end
-  
-  before do
-    'before #2'
+    response.write '<div style="padding:1em; border:solid 1px darkblue;">nested before...</div>'
   end
 
   after do
-    'after #1'
-  end
-
-  after do
-    'after #2'
+    response.write '<div style="padding:1em; border:solid 1px darkblue;">nested after...</div>'
   end
 
   get do
@@ -30,6 +36,10 @@ context '/' do
 end
 
 context 'contact' do
+  
+  before do
+    response.write '<h1>Contact</h1>'
+  end
   
   get do
     'This is the /contact action'

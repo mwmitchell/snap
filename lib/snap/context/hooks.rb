@@ -3,7 +3,7 @@ module Snap
   module Context
     
     module Hooks
-  
+      
       def before_blocks; @before_blocks||=[] end
       def after_blocks; @after_blocks||=[] end
   
@@ -26,14 +26,14 @@ module Snap
       # 
       # [array_of_before_filter_responses, action_result_body, array_of_after_filter_response] 
       # 
-      def execute_before_and_after_blocks(action, &block)
-        result = []
-        result << execute_before_blocks(action)
-        result << yield
-        result << execute_after_blocks(action)
-        result
-      end
-  
+      #def execute_before_and_after_blocks(action, &block)
+      #  result = []
+      #  result << execute_before_blocks(action)
+      #  result << yield
+      #  result << execute_after_blocks(action)
+      #  result
+      #end
+      
       #
       # THE REQUEST NEEDS TO BE PASSED IN HERE
       #

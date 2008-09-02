@@ -12,3 +12,30 @@ If the output of a given action or filter is a string, it is added to the respon
 Snap is very similar to Sinatra in that each of it's actions are simple blocks. Snap is a little more structured and flexible than Sinatra. That can be a disadvantage or an advantage depending on the type of app you're trying to build.
 
 * Thanks to Merb and Sinatra for the little bits of code here and there
+
+== Example
+Here is a simple example:
+
+context 'contact' do
+  
+  before do
+    response.write '<div style="padding:1em; border:solid 1px darkblue;">nested before...</div>'
+  end
+
+  after do
+    response.write '<div style="padding:1em; border:solid 1px darkblue;">nested after...</div>'
+  end
+
+  before do
+    response.write '<h1>Contact</h1>'
+  end
+  
+  get do
+    'This is the /contact action'
+  end
+  
+  get ':who' do
+    "This is the /contact/#{local_params[:who]} action!"
+  end
+  
+end

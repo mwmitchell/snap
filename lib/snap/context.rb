@@ -88,7 +88,12 @@ module Snap::Context
         halted_content = catch :halt do
           run_safely do
             @action=find_action(request, response)
-            response.write(@action.execute) if @action
+            # could do something here with returned content from before filters...
+            @action.execute_before_blocks(@action)
+            # append action response to body...
+            response.write @action.execute(request, response)
+            # could do something here with returned content from after filters...
+            @action.execute_after_blocks(@action)
           end
           nil
         end
