@@ -13,8 +13,7 @@ end
 before do
   if request.params['halt']
     response.status = 500
-    response.write 'Halt!'
-    throw :halt
+    throw :halt, 'Halt!'
   end
 end
 
@@ -38,7 +37,7 @@ end
 context 'contact' do
   
   before do
-    response.write '<h1>Contact</h1>'
+    '<h1>Contact</h1>'
   end
   
   get do

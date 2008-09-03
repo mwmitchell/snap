@@ -35,7 +35,7 @@ end
   request
   event
   action
-  context/hooks
+  context/filters
   context
   view_helper
 ).each{|p|require "snap/#{p}"}

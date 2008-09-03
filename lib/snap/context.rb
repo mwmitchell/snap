@@ -4,7 +4,7 @@ module Snap::Context
     
     include Snap::RequestHelpers
     include Snap::ConfigHelpers
-    include Snap::Context::Hooks
+    include Snap::Context::Filters
     
     attr_accessor :parent
     attr_reader :name, :path, :options, :block, :full_path
@@ -46,12 +46,6 @@ module Snap::Context
       parent.send(m,*args,&block)
     end
     
-    def use(klass, *args)
-      # response.write "USE children.size == #{children.size}"
-      klass.root.parent=self
-      children<<[klass, args] unless children.detect{|i|(i[0]==klass and i[1]==args)}
-    end
-    
     def context(path, options={}, &block)
       add_child path, options, &block
     end
@@ -87,13 +81,7 @@ module Snap::Context
       begin
         halted_content = catch :halt do
           run_safely do
-            @action=find_action(request, response)
-            # could do something here with returned content from before filters...
-            @action.execute_before_blocks(@action)
-            # append action response to body...
-            response.write @action.execute(request, response)
-            # could do something here with returned content from after filters...
-            @action.execute_after_blocks(@action)
+            @action=find_action(request, response).execute
           end
           nil
         end
@@ -128,15 +116,8 @@ module Snap::Context
       pi=request.path_info.cleanup('/')
       instance_eval &@block if @block
       children.each do |child|
-        if child.is_a?(Array)
-        #  if a=child[0].root.find_action(request, response, child[0])
-        #    a.context.app=child[0].new((@app||app_klass.new))
-        #    return a
-        #  end
-        elsif a=child.find_action(request, response, parent)
-          #child.parent=self
-          return a
-        end
+        a=child.find_action(request, response, parent)
+        return a if a
       end
       actions.each do |a|
         if a.match?(request.request_method, pi)

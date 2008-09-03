@@ -19,9 +19,15 @@ module Snap::Event
       @context.send(m,*args,&block) if @context
     end
     
-    def execute(req, res)
-      self.request=req
-      self.response=res
+    def request
+      @context.request
+    end
+    
+    def response
+      @context.response
+    end
+    
+    def execute
       result = instance_eval &@block
       if format_mapper and f = format_mapper.resolve(request.format)
         result = instance_eval &f if f
