@@ -1,4 +1,6 @@
 module SimpleApp; end
+
+require 'haml'
   
 class SimpleApp::Root
   

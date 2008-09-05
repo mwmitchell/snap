@@ -72,4 +72,8 @@ module Snap::ResponseHelpers
     ::Erubis::BlockAwareEruby.new(nil, :trim=>false).process(template, context)
   end
   
+  def render_haml(content, options = {}, &b)
+    ::Haml::Engine.new(content).render(options[:scope] || self, options[:locals] || {}, &b)
+  end
+  
 end
