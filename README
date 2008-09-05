@@ -5,11 +5,9 @@ Snap is a small web framework for creating RESTful web applications. The heart o
 
 The start of any Snap application is a root Context. Contexts are sub-slices of a url and help keep routes DRY. The Context is responsible for defining the base URL path for it's actions, filters and child Contexts. One Context is equal to a set of URL path fragments. For example, a context could be /admin/transactions. Within that Context, there can be multiple actions, filters and sub-contexts.
 
-The request and response handlers are able to negotiate different formats of content using the :format method within an action block.
+The request and before/after handlers are able to negotiate different formats of content using the :format method within an action block.
 
-If the output of a given action or filter is a string, it is added to the response body.
-
-Snap is very similar to Sinatra in that each of it's actions are simple blocks. Snap is a little more structured and flexible than Sinatra. That can be a disadvantage or an advantage depending on the type of app you're trying to build.
+Snap is very similar to Sinatra in that each action is a simple block. Snap is a little more structured and flexible than Sinatra. This can be a disadvantage or an advantage depending on the type of app you're trying to build.
 
 * Thanks to Merb and Sinatra for the little bits of code here and there
 
