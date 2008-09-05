@@ -73,6 +73,7 @@ module Snap::ResponseHelpers
   end
   
   def render_haml(content, options = {}, &b)
+    require 'haml'
     ::Haml::Engine.new(content).render(options[:scope] || self, options[:locals] || {}, &b)
   end
   
