@@ -8,10 +8,10 @@ module Snap
     
     module ClassMethods
       
-      attr_accessor :root_block
+      attr_accessor :start_block
       
       def start(&block)
-        @root_block = block
+        @start_block = block
       end
       
     end
