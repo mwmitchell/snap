@@ -9,12 +9,10 @@ class Snap::Initializer
   def call(env)
     request=Snap::Request.new(env)
     response=Rack::Response.new
-    response.finish
     response['Content-Type']="text/#{request.format}"
-    c=Snap::Context::Base.new('/') do
-      load_script File.expand_path('app/events.rb')
-    end
+    c = Snap::Context::Base.new ('/', {}, nil, &@config.app.class.root_block)#.execute(request, response)
     c.execute(request, response)
+    response.finish
   end
   
 end

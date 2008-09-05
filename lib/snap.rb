@@ -38,4 +38,5 @@ end
   context/filters
   context
   view_helper
+  app
 ).each{|p|require "snap/#{p}"}

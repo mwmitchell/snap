@@ -1,6 +1,6 @@
 class Snap::Config
   
-  attr_reader :mutex, :view_paths, :default_renderer, :env
+  attr_accessor :mutex, :view_paths, :default_renderer, :env, :app
   
   def initialize
     @mutex=true

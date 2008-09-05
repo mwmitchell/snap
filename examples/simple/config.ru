@@ -1,7 +1,9 @@
 require '../../lib/snap.rb'
+require './simple_app.rb'
 
 app = Snap::Initializer.new { |config|
-  config.view_paths << 'app/views'
+  config.app = SimpleApp::Root.new
+  #config.view_paths << 'app/views'
   #config.sessions=true
   #config.logging=true
   #config.static :urls=>'', :root=>''
