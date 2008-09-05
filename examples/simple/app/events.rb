@@ -1,11 +1,13 @@
 before do
   format.html do
+    puts 'GLOBAL BEFORE'
     response.write 'GLOBAL BEFORE' + '<hr/>'
   end
 end
 
 after do
   format.html do
+    puts 'GLOBAL AFTER'
     response.write '<hr/> GLOBAL AFTER'
   end
 end
@@ -36,9 +38,14 @@ end
 
 context 'contact' do
   
-  before do
-    '<h1>Contact</h1>'
+  after do
+    puts 'CONTACT BEFORE'
+    response.write '<div style=""><h1>Contact</h1>' + response.body.to_s + '</div>'
   end
+  
+  #pre_exe 
+  #post_exe
+  #filter :before
   
   get do
     'This is the /contact action'
