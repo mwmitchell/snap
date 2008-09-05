@@ -16,26 +16,32 @@ Snap is very similar to Sinatra in that each of it's actions are simple blocks. 
 == Example
 Here is a simple example:
 
-context 'contact' do
-  
-  before do
-    response.write '<div style="padding:1em; border:solid 1px darkblue;">nested before...</div>'
-  end
+module SimpleApp; end
 
-  after do
-    response.write '<div style="padding:1em; border:solid 1px darkblue;">nested after...</div>'
-  end
-
-  before do
-    response.write '<h1>Contact</h1>'
-  end
+class SimpleApp::Root
   
-  get do
-    'This is the /contact action'
-  end
+  include Snap::App
   
-  get ':who' do
-    "This is the /contact/#{local_params[:who]} action!"
+  start do
+    
+    after do
+      nav = <<-EOF
+        <ul>
+          <li><a href="/">home</a></li>
+          <li><a href="/about">about</a></li>
+          <li><a href="/about/ruby">about ruby</a></li>
+        </ul>
+      EOF
+      response.body = "<hr/>#{nav}#{response.body}<hr/>"
+    end
+    
+    get {'The root path using GET'}
+    context 'about' do
+      get {"Snap is an experimental framework?!"}
+      get 'ruby' do
+        'Ruby -> http://ruby.com'
+      end
+    end
   end
   
 end

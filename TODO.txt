@@ -1,6 +1,8 @@
 The view handling needs a lot of help
 	Find way to register multiple renderers
 		
+		??
+		
 		config.renderer[:erb] = lambda {|*options|
 			#
 		}
@@ -19,40 +21,3 @@ Filter logic...
 			body = exec
 		after exec
 	after exec
-
-Change definition of app to:
-	
-	class MyApp
-		
-		include Snap::App
-		
-		start do
-			get {'Ta-Da!}
-			context 'bookmarks' do
-				get {'All bookmarks'}
-				get 'new' {'form for new bookmark'}
-				post {'A new bookmark'}
-				context ':id' do
-					get 'edit' {'editing bookmark'}
-					get {'showing bookmark'}
-					put {'updating bookmark'}
-					delete {'deleting bookmark'}
-				end
-			end
-		end
-		
-	end
-
-...instead of the current script/files idea. Also provide forward_to, similar to Dot:
-	
-	context 'admin', :forward=>AdminApp
-	
-	class AdminApp
-		
-		include Snap::App
-		
-		start do
-			get {'Administrate now!'}
-		end
-		
-	end
