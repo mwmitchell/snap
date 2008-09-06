@@ -77,4 +77,9 @@ module Snap::ResponseHelpers
     ::Haml::Engine.new(content).render(options[:scope] || self, options[:locals] || {}, &b)
   end
   
+  def markaby
+    require 'markaby'
+    Markaby::Builder.new
+  end
+  
 end

@@ -25,14 +25,36 @@ module Snap::Context
       init(path, options, parent, &block)
     end
     
-    def init(path, options={}, parent=nil, &block)
+    def init(input_path, options={}, parent=nil, &block)
       @name=nil
-      @path=URI.encode(path)
-      if path.is_a?(Hash)
-        @name,@path=path.keys.first, path.values.first
-      elsif path.is_a?(Symbol)
-        @name,@path=path,''
+      
+      if input_path.class == String
+        # standard, id-less action
+        # get 'admin' do
+        # ...
+        # end
+        @path = input_path
+        puts "String! @name == #{@name} and @path == #{@path}"
+      elsif input_path.class == Hash
+        # for identifying an action:
+        # get :admin=>'admin' do
+        # ...
+        # end
+        @name, @path = input_path.keys.first, input_path.values.first
+        puts "Hash! @name == #{@name} and @path == #{@path}"
+      elsif input_path.class == Symbol
+        # in case you want to identify an action, but not specify the blank path
+        # get :home do
+        # ...
+        # end
+        puts "Symbol! @name == #{@name} and @path == #{@path}"
+        @name, @path = input_path, ''
+      else
+        puts "Something Else! @name == #{@name} and @path == #{@path}"
+        @path=input_path.to_s
       end
+      @path=URI.encode(@path.to_s)
+      
       @options=options
       @parent=parent
       @block=block if block_given?
@@ -81,7 +103,8 @@ module Snap::Context
       begin
         halted_content = catch :halt do
           run_safely do
-            @action=find_action(request, response).execute
+            @action=find_action(request, response)
+            @action.execute
           end
           nil
         end
@@ -115,14 +138,19 @@ module Snap::Context
       @response=response
       pi=request.path_info.cleanup('/')
       instance_eval &@block if @block
+      puts 'looking for action...'
       children.each do |child|
-        a=child.find_action(request, response, parent)
+        puts "Checking child context == #{child.path}"
+        a=child.find_action(request, response, self)
+        puts "a == #{a}"
         return a if a
       end
+      puts "target context.path == #{self.path}"
       actions.each do |a|
-        if a.match?(request.request_method, pi)
-          return a
-        end
+        puts "Checking action == #{a.path}"
+        match = a.match?(request.request_method, pi)
+        puts "match? #{match}"
+        return a if match
       end
       nil
     end

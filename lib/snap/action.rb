@@ -2,15 +2,37 @@ class Snap::Action < Snap::Event::Base
   
   attr_reader :context, :request_method, :name, :path, :options, :block, :full_path
   
-  def initialize(context, request_method, path='', options={}, &block)
+  def initialize(context, request_method, input_path='', options={}, &block)
     @request_method=request_method
     @name=nil
-    @path=URI.encode(path)
-    if path.is_a?(Hash)
-      @name,@path=path.keys.first,path.values.first
-    elsif path.is_a?(Symbol)
-      @name,@path=path,''
+    
+    if input_path.class == String
+      # standard, id-less action
+      # get 'admin' do
+      # ...
+      # end
+      @path = input_path
+      puts "String! @name == #{@name} and @path == #{@path}"
+    elsif input_path.class == Hash
+      # for identifying an action:
+      # get :admin=>'admin' do
+      # ...
+      # end
+      @name, @path = input_path.keys.first, input_path.values.first
+      puts "Hash! @name == #{@name} and @path == #{@path}"
+    elsif input_path.class == Symbol
+      # in case you want to identify an action, but not specify the blank path
+      # get :home do
+      # ...
+      # end
+      puts "Symbol! @name == #{@name} and @path == #{@path}"
+      @name, @path = input_path, ''
+    else
+      puts "Something Else! @name == #{@name} and @path == #{@path}"
+      @path=input_path.to_s
     end
+    @path=URI.encode(@path.to_s)
+    
     super context, options, &block
   end
   
