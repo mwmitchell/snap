@@ -4,7 +4,7 @@ class SimpleApp::Root
   
   include Snap::App
   
-  start do
+  map do
     
     after do
       nav = <<-EOF
@@ -31,7 +31,7 @@ class SimpleApp::Root
       end
     end
     
-    context 'about' do
+    map 'about' do
       get {"Snap is an experimental framework?!"}
       get 'ruby' do
         'Ruby -> http://www.ruby-lang.org'

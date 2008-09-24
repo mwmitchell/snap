@@ -10,7 +10,7 @@ module Snap
       
       attr_accessor :start_block
       
-      def start(&block)
+      def map(&block)
         @start_block = block
       end
       

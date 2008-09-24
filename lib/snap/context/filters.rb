@@ -31,9 +31,7 @@ module Snap
         result += eval_blocks(before_blocks, action)
         result
       end
-  
-      #
-      # THE REQUEST NEEDS TO BE PASSED IN HERE
+      
       #
       def execute_after_filters(action=nil)
         action||=@action

@@ -8,23 +8,14 @@ module Snap::Event
     
     attr_reader :options
     attr_reader :block
-    attr_accessor :request
-    attr_accessor :response
     
     def initialize(context, options=nil, &block)
       @context,@options,@block=context,options,block
+      @request, @response = @context.request, @context.response
     end
     
     def method_missing(m,*args,&block)
       @context.send(m,*args,&block) if @context
-    end
-    
-    def request
-      @context.request
-    end
-    
-    def response
-      @context.response
     end
     
     def execute
