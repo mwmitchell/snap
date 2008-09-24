@@ -32,10 +32,6 @@ module Snap::Context
       @block=block if block_given?
     end
     
-    def load_script(name)
-      instance_eval File.read(name) rescue raise "#{$!} - when loading #{name}"
-    end
-    
     def method_missing(m,*args,&block)
       parent.send(m,*args,&block)
     end
@@ -108,19 +104,24 @@ module Snap::Context
       @full_path||=(parent ? [parent.full_path, path].join('/') : path).cleanup('/')
       @request=request
       @response=response
-      pi=request.path_info.cleanup('/')
+      pi=request.path_info
       instance_eval &@block if @block
       children.each do |child|
-        a=child.find_action(request, response, self)
-        return a if a
+        c=child.find_action(request, response, self)
+        return c if c
       end
       actions.each do |a|
-        match = a.match?(request.request_method, pi)
-        return a if match
+        return a if a.match?(request.request_method, pi)
       end
       nil
     end
     
+    #
+    # Utility method that extracts a "name" and "path" from some arbitrary input:
+    # {:id=>'path'} => [:id, 'path']
+    # :default => [:default, '']
+    # 'path' => [nil, 'path']
+    #
     def self.resolve_name_and_path(input_path)
       name=nil
       if input_path.class == String
