@@ -1,27 +1,22 @@
 = Snap - REST made easy
 
 == Overview
-Snap is a small web framework for creating RESTful web applications. The heart of Snap is the controller layer; a contextual, block based DSL featuring RESTful action hooks, an event filter system and url param mapping.
+Snap is a small web framework for creating RESTful web applications. The heart of Snap is the controller layer; a contextual, block based DSL featuring RESTful action hooks, an event callback system and url param mapping.
 
-The start of any Snap application is a root Context. Contexts are sub-slices of a url and help keep routes DRY. The Context is responsible for defining the base URL path for it's actions, filters and child Contexts. One Context is equal to a set of URL path fragments. For example, a context could be /admin/transactions. Within that Context, there can be multiple actions, filters and sub-contexts.
+The start of any Snap application is a root Zone. Zones are sub-slices of a url and help keep routes DRY. The Zone is responsible for defining the base URL path for it's actions, callbacks and child Zones. One Zone is equal to a (set of?) URL path fragments. For example, a Zone could be /admin/transactions. Within that Zone, there can be multiple actions, callbacks and sub-zones. Once you define a Zone, every child-Zone or callback within it is bound to the path it's defined (DRY's up your "routes").
 
-The request and before/after handlers are able to negotiate different formats of content using the :format method within an action block.
-
-Snap is very similar to Sinatra in that each action is a simple block. Snap is a little more structured and flexible than Sinatra. This can be a disadvantage or an advantage depending on the type of app you're trying to build.
-
-* Thanks to Merb and Sinatra for the little bits of code here and there
+The request and before/after callbacks are able to negotiate different formats of content using the :format method within an action block.
 
 == Example
 Here is a simple example:
 
-module SimpleApp; end
  
-class SimpleApp::Root
-
+class AppEvents
+	
 	include Snap::App
 
 	map do
-
+		
 		after do
 			nav = <<-EOF
 				<ul>
@@ -33,9 +28,9 @@ class SimpleApp::Root
 			EOF
 			response.body = "<h1>Snap!</h1><hr/>#{nav}#{response.body}<hr/>"
 		end
-
+		
 		get {'The root path using GET'}
-
+		
 		get :markaby=>'markaby' do
 			markaby.div do
 				h3 "Render your HTML with Markaby?"
@@ -46,7 +41,7 @@ class SimpleApp::Root
 				end
 			end
 		end
-
+		
 		map 'about' do
 			get {"Snap is an experimental framework?!"}
 			get 'ruby' do
@@ -55,5 +50,7 @@ class SimpleApp::Root
 		end
 		
 	end
-
+	
 end
+
+* Thanks to Merb and Sinatra for the little bits of code here and there ;)

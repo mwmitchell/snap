@@ -9,7 +9,7 @@ app = Snap::Initializer.new { |config|
   #config.static :urls=>'', :root=>''
   #config.mime :xml, 'application/xml'
   config.after_initialize do
-    puts 'OK!'
+    # gets executed on every request
   end
 }
 
