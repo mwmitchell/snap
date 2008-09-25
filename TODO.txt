@@ -21,18 +21,3 @@ Filter logic...
 			body = exec
 		after exec
 	after exec
-
-Consider making request, response and config global:
-	
-	Snap::Web.config
-	Snap::Web.request
-	Snap::Web.response
-	
-Then in each of the modules/classes:
-
-	include Snap::Web
-
-classes that use response/request:
-	
-	context
-	event -> filter(blocks) + action
