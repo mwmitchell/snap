@@ -2,6 +2,10 @@ module Snap::ViewHelper
   
   module Erubis
     
+    def url
+      
+    end
+    
     def capture(&blk)
       _old_buf, @_erb_buf = @_erb_buf, ""
       blk.call

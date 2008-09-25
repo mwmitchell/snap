@@ -34,9 +34,9 @@ module Snap::Zone
       @block=block if block_given?
     end
     
-    #def method_missing(m,*args,&block)
-    #  parent.send(m,*args,&block)
-    #end
+    def method_missing(m,*args,&block)
+      parent.send(m,*args,&block) rescue "Couldn't find method \"#{m}\" in Zone (#{self.class}) or parent Zones."
+    end
     
     def map(path, options={}, &block)
       add_child path, options, &block
@@ -132,23 +132,23 @@ module Snap::Zone
         # ...
         # end
         path = input_path
-        puts "String! name == #{name} and path == #{path}"
+        # puts "String! name == #{name} and path == #{path}"
       elsif input_path.class == Hash
         # for identifying an action:
         # get :admin=>'admin' do
         # ...
         # end
         name, path = input_path.keys.first, input_path.values.first
-        puts "Hash! name == #{name} and path == #{path}"
+        # puts "Hash! name == #{name} and path == #{path}"
       elsif input_path.class == Symbol
         # in case you want to identify an action, but not specify the blank path
         # get :home do
         # ...
         # end
-        puts "Symbol! name == #{name} and path == #{path}"
+        # puts "Symbol! name == #{name} and path == #{path}"
         name, path = input_path, ''
       else
-        puts "Something Else! @name == #{name} and @path == #{path}"
+        # puts "Something Else! @name == #{name} and @path == #{path}"
         path=input_path.to_s
       end
       [name, URI.encode(path.to_s)]

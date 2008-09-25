@@ -18,6 +18,10 @@ class SimpleApp::Root
       response.body = "<h1>Snap!</h1><hr/>#{nav}#{response.body}<hr/>"
     end
     
+    get :test=>'test' do
+      render
+    end
+    
     get {'The root path using GET'}
     
     get :markaby=>'markaby' do

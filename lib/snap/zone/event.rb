@@ -19,7 +19,7 @@ module Snap::Zone::Event
     
     def execute
       result = instance_eval &@block
-      if format_mapper and f = format_mapper.resolve(request.format)
+      if format and f = format.resolve(request.format)
         result = instance_eval &f if f
       end
       result

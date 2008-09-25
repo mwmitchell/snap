@@ -1,14 +1,14 @@
 class Snap::Config
   
-  attr_accessor :mutex, :view_paths, :default_renderer, :env, :app
+  attr_accessor :mutex, :view_paths, :env, :app, :default_renderer
   
   attr :after_initialize_block
   
   def initialize
     @mutex=true
-    @view_paths=[]
-    @default_renderer = :erb
+    @view_paths=[File.join(File.expand_path('.'), 'views')]
     @env = :development
+    @default_renderer = :erb
   end
   
   # sets the callback block
