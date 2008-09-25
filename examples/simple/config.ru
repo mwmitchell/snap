@@ -8,6 +8,9 @@ app = Snap::Initializer.new { |config|
   #config.logging=true
   #config.static :urls=>'', :root=>''
   #config.mime :xml, 'application/xml'
+  config.after_initialize do
+    puts 'OK!'
+  end
 }
 
 Rack::File::MIME_TYPES[:xml] = 'application/xml'

@@ -2,16 +2,19 @@ module Snap
   
   module App
     
+    include Snap::Context
+    
     def self.included(base)
       base.extend ClassMethods
     end
     
     module ClassMethods
       
-      attr_accessor :start_block
+      attr :root_block
       
+      # The root map method for the app
       def map(&block)
-        @start_block = block
+        @root_block = block
       end
       
     end

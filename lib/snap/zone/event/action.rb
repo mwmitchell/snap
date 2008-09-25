@@ -1,11 +1,11 @@
-class Snap::Action < Snap::Event::Base
+class Snap::Zone::Event::Action < Snap::Zone::Event::Base
   
-  attr_reader :context, :request_method, :name, :path, :options, :block, :full_path
+  attr_reader :request_method, :name, :path, :full_path
   
-  def initialize(context, request_method, input_path='', options={}, &block)
+  def initialize(zone, request_method, input_path='', options={}, &block)
     @request_method=request_method
-    @name, @path = Snap::Context::Base.resolve_name_and_path(input_path)
-    super context, options, &block
+    @name, @path = Snap::Zone::Base.resolve_name_and_path(input_path)
+    super zone, options, &block
   end
   
   def local_values
@@ -17,8 +17,8 @@ class Snap::Action < Snap::Event::Base
   end
   
   def match?(method, input_path)
-    # must set full path here... if this is a "use", then the context won't be known until now
-    @full_path||=[context.full_path, path].join('/').cleanup('/')
+    # must set full path here... if this is a "use", then the zone won't be known until now
+    @full_path||=[zone.full_path, path].join('/').cleanup('/')
     # methods much match
     return unless method==@request_method
     # return if exact match
@@ -62,9 +62,9 @@ class Snap::Action < Snap::Event::Base
   end
   
   def execute
-    @context.execute_before_filters(self)
+    @zone.execute_before_filters(self)
     response.write super
-    @context.execute_after_filters(self)
+    @zone.execute_after_filters(self)
   end
   
 end

@@ -9,16 +9,10 @@ require 'core_ext'
 
 module Snap
   
-  class << self; attr :config end
-  
-  def self.config
-    @config ||= Snap::Config.new
-  end
-  
   module Version
     MAJOR = '0'
     MINOR = '4'
-    REVISION = '0'
+    REVISION = '1'
     def self.combined
       [MAJOR, MINOR, REVISION].join('.')
     end
@@ -28,15 +22,11 @@ end
 
 %W(
   config
-  config_helpers
+  context
   initializer
   response_helpers
-  request_helpers
   request
-  event
-  action
-  context/filters
-  context
+  zone
   view_helper
   app
 ).each{|p|require "snap/#{p}"}

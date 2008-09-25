@@ -30,5 +30,5 @@ lib/snap/response_helpers.rb
   s.test_files = []
   s.rdoc_options = ['--main', 'README']
   s.extra_rdoc_files = ['README', 'LICENSE']
-  s.add_dependency('rack', ['0.3.0'])
+  s.add_dependency('rack', ['0.4.0'])
 end

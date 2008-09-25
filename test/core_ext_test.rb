@@ -1,5 +1,5 @@
 require 'test/unit'
-require '../lib/core_ext'
+require 'snap'
 
 class CoreExtTest < Test::Unit::TestCase
   
