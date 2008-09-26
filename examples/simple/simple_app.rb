@@ -12,7 +12,7 @@ class SimpleApp::Root
     end
     
     get :index do
-      @page_title = 'Welcome to Snap\'s simple demo.'
+      @page_title = 'Welcome to Snaps\' simple demo.'
       render
     end
     
