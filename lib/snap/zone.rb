@@ -1,6 +1,7 @@
 module Snap::Zone
   
   autoload :Callbacks, 'snap/zone/callbacks'
+  autoload :Action, 'snap/zone/action'
   autoload :Event, 'snap/zone/event'
   
   class Base
@@ -9,7 +10,7 @@ module Snap::Zone
     include Snap::Zone::Callbacks
     
     attr_accessor :parent
-    attr_reader :name, :path, :options, :block, :full_path
+    attr_reader :full_name, :name, :path, :options, :block, :full_path
     attr_reader :response, :request
     
     # The matching action
@@ -32,10 +33,11 @@ module Snap::Zone
       @options=options
       @parent=parent
       @block=block if block_given?
+      @full_name = @parent.nil? ? @name : [@parent.full_name, @name].reject{|v|v.to_s.empty?}.join('/')
     end
     
     def method_missing(m,*args,&block)
-      parent.send(m,*args,&block) rescue "Couldn't find method \"#{m}\" in Zone (#{self.class}) or parent Zones."
+      parent.send(m,*args,&block) rescue "Couldn't find method \"#{m}\" in zone or parent(s)."
     end
     
     def map(path, options={}, &block)
@@ -51,7 +53,7 @@ module Snap::Zone
       # response.write "actions.size == #{actions.size}"
       # remove existing action if it has the same request_method, path and options
       actions.delete_if{|a|(a.request_method==request_method and path==a.path and options==a.options)}
-      actions << Snap::Zone::Event::Action.new(self, request_method, path, options, &block)
+      actions << Snap::Zone::Action.new(self, request_method, path, options, &block)
     end
     
     def children

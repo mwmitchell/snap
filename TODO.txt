@@ -1,3 +1,11 @@
+* nice error handlers for HTTP responses
+* change action and zone :path and :full_path to :route and :full_route
+* consider removing instance variable in classes (Zone::Event::Base) that render
+	- goal: provide ONLY variables set in actions and helper methods?
+* more flexibility in template file resolution logic (ability to specify only renderer extension etc.)
+* provide shortcut to response.body => :body
+* add format type checks to Rack::MimeTypes (already done?)
+
 The view handling needs a lot of help
 	Find way to register multiple renderers
 		

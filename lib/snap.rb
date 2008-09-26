@@ -27,6 +27,5 @@ end
   response_helpers
   request
   zone
-  view_helper
-  app
+  renderer
 ).each{|p|require "snap/#{p}"}

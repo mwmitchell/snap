@@ -21,3 +21,35 @@ http://developer.yahoo.net/yui/license.txt
 version: 2.5.2
 */
 body {font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}table {font-size:inherit;font:100%;}pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
+
+#body{
+	padding:1em;
+	width:700px;
+	margin:0 auto;
+	border:dotted 1px gray;
+}
+
+ul#nav {
+margin-left: 0;
+padding-left: 0;
+white-space: nowrap;
+}
+
+#nav li {
+display: inline;
+list-style-type: none;
+}
+
+#nav a { padding: 3px 10px; }
+
+#nav a:link, #nav a:visited {
+color: #fff;
+background-color: #036;
+text-decoration: none;
+}
+
+#nav a:hover {
+color: #fff;
+background-color: #369;
+text-decoration: none;
+}

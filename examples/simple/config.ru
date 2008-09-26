@@ -20,4 +20,6 @@ app = Rack::Session::Cookie.new(app)
 app = Rack::CommonLogger.new(app)
 app = Rack::Static.new(app, :urls=>['/images', '/css', '/js'], :root=>'public')
 
+app = Rack::Reloader.new(app)
+
 run app

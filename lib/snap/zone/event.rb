@@ -1,11 +1,27 @@
 module Snap::Zone::Event
   
-  autoload :Action, 'snap/zone/event/action'
+  include Snap::Context # access to request, response and config
+  
+  def self.included(base)
+    base.extend ClassMethods
+  end
+  
+  module ClassMethods
+    
+    attr :root_block
+    
+    # The root map method for the app
+    def map(&block)
+      @root_block = block
+    end
+    
+  end
   
   class Base
     
+    include Snap::Context # access to request, response and config
     include Snap::ResponseHelpers
-    include Snap::Context
+    include Snap::Renderer
     
     attr_reader :zone, :options, :block
     

@@ -1,10 +1,11 @@
-class Snap::Zone::Event::Action < Snap::Zone::Event::Base
+class Snap::Zone::Action < Snap::Zone::Event::Base
   
-  attr_reader :request_method, :name, :path, :full_path
+  attr_reader :request_method, :full_name, :name, :path, :full_path
   
   def initialize(zone, request_method, input_path='', options={}, &block)
     @request_method=request_method
     @name, @path = Snap::Zone::Base.resolve_name_and_path(input_path)
+    @full_name = zone.nil? ? @name : [zone.full_name, @name].reject{|v|v.to_s.empty?}.join('/')
     super zone, options, &block
   end
   
