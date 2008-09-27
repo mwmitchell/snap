@@ -8,7 +8,7 @@ class SimpleApp::Root
     
     after do
       # wrap the pages up in a template
-      response.body = render('main.layout', {:content=>response.body}, {:bindings=>[@zone.action]})
+      wrap('main.layout', {}, {:bindings=>[@zone.action]})
     end
     
     get :index do

@@ -17,6 +17,10 @@ module Snap::Renderer
     send("#{config.default_renderer}" , *args)
   end
   
+  def wrap(template, variables={}, options={})
+    response.body = render(template, variables.merge({:content=>response.body.to_s}), options)
+  end
+  
   # default render method uses Erubis
   def erb(template=nil, variables={}, options={})
     

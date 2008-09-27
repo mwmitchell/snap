@@ -37,7 +37,7 @@ module Snap::Zone
     end
     
     def method_missing(m,*args,&block)
-      parent.send(m,*args,&block) rescue "Couldn't find method \"#{m}\" in zone or parent(s)."
+      parent.send(m,*args,&block) rescue "Couldn't find method \"#{m}\" in zone or parent zone(s)."
     end
     
     def map(path, options={}, &block)

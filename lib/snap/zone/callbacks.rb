@@ -36,9 +36,9 @@ module Snap::Zone::Callbacks
     result += parent.execute_after_filters(action) if parent
     result
   end
-
+  
   protected
-
+  
   def eval_blocks(events, action)
     request,response=action.request,action.response
     result=[]

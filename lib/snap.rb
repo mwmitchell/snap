@@ -12,7 +12,7 @@ module Snap
   module Version
     MAJOR = '0'
     MINOR = '4'
-    REVISION = '1'
+    REVISION = '2'
     def self.combined
       [MAJOR, MINOR, REVISION].join('.')
     end
@@ -24,7 +24,7 @@ end
   config
   context
   initializer
-  response_helpers
+  response
   request
   zone
   renderer

@@ -12,7 +12,7 @@ module Snap::Zone::Event
     
     # The root map method for the app
     def map(&block)
-      @root_block = block
+      self.root_block = block
     end
     
   end
@@ -20,7 +20,7 @@ module Snap::Zone::Event
   class Base
     
     include Snap::Context # access to request, response and config
-    include Snap::ResponseHelpers
+    include Snap::Response::Helpers
     include Snap::Renderer
     
     attr_reader :zone, :options, :block

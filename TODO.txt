@@ -5,6 +5,7 @@
 * more flexibility in template file resolution logic (ability to specify only renderer extension etc.)
 * provide shortcut to response.body => :body
 * add format type checks to Rack::MimeTypes (already done?)
+* remove as much of the core_ext stuff as possible
 
 The view handling needs a lot of help
 	Find way to register multiple renderers
