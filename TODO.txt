@@ -1,4 +1,17 @@
-* nice error handlers for HTTP responses
+* nice error handlers for HTTP responses:
+	
+	error :not_found do
+		format.html{render}
+	end
+	
+	error :server_error do
+		format.html{render}
+	end
+	
+	error 302 do
+		format.html{render}
+	end
+
 * change action and zone :path and :full_path to :route and :full_route
 * consider removing instance variable in classes (Zone::Event::Base) that render
 	- goal: provide ONLY variables set in actions and helper methods?
@@ -6,6 +19,10 @@
 * provide shortcut to response.body => :body
 * add format type checks to Rack::MimeTypes (already done?)
 * remove as much of the core_ext stuff as possible
+* remove unnecessary array stuff in Zone::Callbacks
+* clean up Zone::Action.match?
+* move local_params (Zone::Action and Zone::Event) into request.params
+* cleanup Zone::Base - move request execution/mutex stuff to some other module?
 
 The view handling needs a lot of help
 	Find way to register multiple renderers

@@ -1,5 +1,6 @@
 #
 # The "Context" is essentially the current request
+# These attributes normally get set in the Snap::Initializer
 #
 module Snap::Context
   
