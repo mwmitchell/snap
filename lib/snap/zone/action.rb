@@ -1,11 +1,11 @@
 class Snap::Zone::Action < Snap::Zone::Event::Base
   
-  attr_reader :request_method, :full_name, :name, :path, :full_path
+  attr_reader :request_method, :full_key, :key, :route, :full_route
   
-  def initialize(zone, request_method, input_path='', options={}, &block)
+  def initialize(zone, request_method, input_route='', options={}, &block)
     @request_method=request_method
-    @name, @path = Snap::Zone::Base.resolve_name_and_path(input_path)
-    @full_name = zone.nil? ? @name : [zone.full_name, @name].reject{|v|v.to_s.empty?}.join('/')
+    @key, @route = Snap::Zone::Base.resolve_key_and_route(input_route)
+    @full_key = zone.nil? ? @key : [zone.full_key, @key].reject{|v|v.to_s.empty?}.join('/')
     super zone, options, &block
   end
   
@@ -18,26 +18,26 @@ class Snap::Zone::Action < Snap::Zone::Event::Base
   end
   
   def match?(method, input_path)
-    # must set full path here... if this is a "use", then the zone won't be known until now
-    @full_path||=[zone.full_path, path].join('/').cleanup('/')
+    # must set full route here... if this is a "use", then the zone won't be known until now
+    @full_route = [@zone.full_route, @route].join('/').cleanup('/')
     # methods much match
     return unless method==@request_method
     # return if exact match
-    return true if input_path==@full_path
+    return true if input_path==@full_route
     # check simple aliases
     return true if @options[:alias] and @options[:alias].to_a.any?{|a|a==input_path}
-    # if @full_path is empty at this point it's clearly not match
-    return if @full_path.empty?
+    # if @full_route is empty at this point it's clearly not match
+    return if @full_route.empty?
     # break up the input path into path fragments
     input_fragments=input_path.cleanup('/').split('/')
     # break up this actions full_path into path fragments
-    path_fragments=@full_path.split('/')
+    route_fragments=@full_route.split('/')
     # if the sizes don't match, then the paths don't match
-    return if path_fragments.size!=input_fragments.size
+    return if route_fragments.size!=input_fragments.size
     # offset for param index
     offset=0
-    # move through each self.full_path fragment
-    path_fragments.each_with_index do |p,index|
+    # move through each @full_route fragment
+    route_fragments.each_with_index do |p,index|
       # if it's a param
       if p[0..0] == ':'
         # get the name of the param

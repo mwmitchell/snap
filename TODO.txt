@@ -13,6 +13,7 @@
 	end
 
 * change action and zone :path and :full_path to :route and :full_route
+* change :name and :full_name to :key and :full_key
 * consider removing instance variable in classes (Zone::Event::Base) that render
 	- goal: provide ONLY variables set in actions and helper methods?
 * more flexibility in template file resolution logic (ability to specify only renderer extension etc.)

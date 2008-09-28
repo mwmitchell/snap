@@ -49,27 +49,27 @@ module Snap::Zone::Callbacks
         next
       end
       # if options is a symbol (single action name) or an array of action names (like :only)
-      if (event.options.is_a?(Symbol) and action.name==event.options) || (event.options.is_a?(Array) and event.options.include?(action.name))
+      if (event.options.is_a?(Symbol) and action.key==event.options) || (event.options.is_a?(Array) and event.options.include?(action.key))
         result << event.execute#(request, response)
         next
       end
       # if options is a Hash...
       if event.options.is_a?(Hash)
         if event.options[:only]
-          if event.options.is_a?(Array) and event.options[:only].include?(action.name)
+          if event.options.is_a?(Array) and event.options[:only].include?(action.key)
             result << event.execute#(request, response)
             next
           end
-          if event.options[:only]==action.name
+          if event.options[:only] == action.key
             result << event.execute#(request, response)
           end
         end
         if event.options[:except]
-          if event.options.is_a?(Array) and ! event.options[:except].include?(action.name)
+          if event.options.is_a?(Array) and ! event.options[:except].include?(action.key)
             result << event.execute#(request, response)
             next
           end
-          if event.options[:except]!=action.name
+          if event.options[:except] != action.key
             result << event.execute#(request, response)
           end
         end

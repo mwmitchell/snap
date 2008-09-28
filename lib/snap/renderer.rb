@@ -24,7 +24,7 @@ module Snap::Renderer
   # default render method uses Erubis
   def erb(template=nil, variables={}, options={})
     
-    template ||= @full_name.to_s
+    template ||= @full_key.to_s
     
     require 'erubis_ext'
     

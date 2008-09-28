@@ -10,7 +10,7 @@ module Snap::Zone
     include Snap::Zone::Callbacks
     
     attr_accessor :parent
-    attr_reader :full_name, :name, :path, :options, :block, :full_path
+    attr_reader :full_key, :key, :route, :full_route, :options, :block
     attr_reader :response, :request
     
     # The matching action
@@ -18,30 +18,30 @@ module Snap::Zone
     
     %W(get post put delete head).each do |m|
       class_eval <<-EOF
-        def #{m}(path='', options={}, &block)
-          add_action :#{m}, path, options, &block
+        def #{m}(route='', options={}, &block)
+          add_action :#{m}, route, options, &block
         end
       EOF
     end
     
-    def initialize(path, options={}, parent=nil, &block)
-      init(path, options, parent, &block)
+    def initialize(route, options={}, parent=nil, &block)
+      init(route, options, parent, &block)
     end
     
-    def init(input_path, options={}, parent=nil, &block)
-      @name, @path = self.class.resolve_name_and_path(input_path)
+    def init(input, options={}, parent=nil, &block)
+      @key, @route = self.class.resolve_key_and_route(input)
       @options=options
       @parent=parent
       @block=block if block_given?
-      @full_name = @parent.nil? ? @name : [@parent.full_name, @name].reject{|v|v.to_s.empty?}.join('/')
+      @full_key = @parent.nil? ? @key : [@parent.full_key, @key].reject{|v|v.to_s.empty?}.join('/')
     end
     
     def method_missing(m,*args,&block)
       parent.send(m,*args,&block) rescue "Couldn't find method \"#{m}\" in zone or parent zone(s)."
     end
     
-    def map(path, options={}, &block)
-      add_child path, options, &block
+    def map(input_route, options={}, &block)
+      add_child input_route, options, &block
     end
     
     def actions
@@ -49,11 +49,8 @@ module Snap::Zone
       @actions
     end
     
-    def add_action(request_method, path, options={}, &block)
-      # response.write "actions.size == #{actions.size}"
-      # remove existing action if it has the same request_method, path and options
-      actions.delete_if{|a|(a.request_method==request_method and path==a.path and options==a.options)}
-      actions << Snap::Zone::Action.new(self, request_method, path, options, &block)
+    def add_action(request_method, input_route, options={}, &block)
+      actions << Snap::Zone::Action.new(self, request_method, input_route, options, &block)
     end
     
     def children
@@ -64,11 +61,8 @@ module Snap::Zone
     #
     # TO DO: store children in hash, using add_child args as key - this will allow code reloading of blocks
     #
-    def add_child(path, options={}, &block)
-      # response.write "children.size == #{children.size}"
-      # remove existing child if it has the same path and options
-      children.delete_if{|c|(c.path==path && c.options==options)}
-      children << self.class.new(path, options, self, &block)
+    def add_child(input_route, options={}, &block)
+      children << self.class.new(input_route, options, self, &block)
     end
     
     def execute(request, response)
@@ -105,14 +99,14 @@ module Snap::Zone
     end
     
     def find_action(request, response, parent=nil)
-      @full_path||=(parent ? [parent.full_path, path].join('/') : path).cleanup('/')
+      @full_route||=(parent ? [parent.full_route, @route].join('/') : @route).cleanup('/')
       @request=request
       @response=response
       pi=request.path_info
       instance_eval &@block if @block
       children.each do |child|
-        c=child.find_action(request, response, self)
-        return c if c
+        a=child.find_action(request, response, self)
+        return a if a
       end
       actions.each do |a|
         return a if a.match?(request.request_method, pi)
@@ -121,39 +115,39 @@ module Snap::Zone
     end
     
     #
-    # Utility method that extracts a "name" and "path" from some arbitrary input:
-    # {:id=>'path'} => [:id, 'path']
+    # Utility method that extracts a "key" and "route" from some arbitrary input:
+    # {:id=>'route'} => [:id, 'route']
     # :default => [:default, '']
-    # 'path' => [nil, 'path']
+    # 'route' => [nil, 'route']
     #
-    def self.resolve_name_and_path(input_path)
-      name=nil
-      if input_path.class == String
+    def self.resolve_key_and_route(input)
+      key=nil
+      if input.class == String
         # standard, id-less action
         # get 'admin' do
         # ...
         # end
-        path = input_path
-        # puts "String! name == #{name} and path == #{path}"
-      elsif input_path.class == Hash
+        route = input
+        # puts "String! key == #{key} and route == #{route}"
+      elsif input.class == Hash
         # for identifying an action:
         # get :admin=>'admin' do
         # ...
         # end
-        name, path = input_path.keys.first, input_path.values.first
-        # puts "Hash! name == #{name} and path == #{path}"
-      elsif input_path.class == Symbol
-        # in case you want to identify an action, but not specify the blank path
+        key, route = input.keys.first, input.values.first
+        # puts "Hash! key == #{key} and route == #{route}"
+      elsif input.class == Symbol
+        # in case you want to identify an action, but not specify the blank route
         # get :home do
         # ...
         # end
-        # puts "Symbol! name == #{name} and path == #{path}"
-        name, path = input_path, ''
+        # puts "Symbol! key == #{key} and route == #{route}"
+        key, route = input, ''
       else
-        # puts "Something Else! @name == #{name} and @path == #{path}"
-        path=input_path.to_s
+        # puts "Something Else! @key == #{key} and @route == #{route}"
+        route=input.to_s
       end
-      [name, URI.encode(path.to_s)]
+      [key, URI.encode(route.to_s)]
     end
     
   end

@@ -8,7 +8,7 @@ module Snap::Zone::Event
   
   module ClassMethods
     
-    attr :root_block
+    attr_accessor :root_block
     
     # The root map method for the app
     def map(&block)
