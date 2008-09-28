@@ -14,7 +14,7 @@ class Snap::Initializer
     res = Snap::Context.response = Rack::Response.new
     res['Content-Type']="text/#{req.format}"
     c = Snap::Zone::Base.new('/', {}, nil, &@config.app.class.root_block)
-    c.execute(req, res)
+    Snap::Dispatcher.new.dispatch!(c)
     res.finish
   end
   

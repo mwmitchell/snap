@@ -23,6 +23,7 @@ end
 %W(
   config
   context
+  dispatcher
   initializer
   response
   request

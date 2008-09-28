@@ -17,23 +17,25 @@ class Snap::Zone::Action < Snap::Zone::Event::Base
     @local_params||={}
   end
   
-  def match?(method, input_path)
+  def match?
+    req_method = self.request.request_method
+    req_path = self.request.path_info
     # must set full route here... if this is a "use", then the zone won't be known until now
     @full_route = [@zone.full_route, @route].join('/').cleanup('/')
     # methods much match
-    return unless method==@request_method
+    return unless req_method==@request_method
     # return if exact match
-    return true if input_path==@full_route
+    return true if req_path==@full_route
     # check simple aliases
-    return true if @options[:alias] and @options[:alias].to_a.any?{|a|a==input_path}
+    return true if @options[:alias] and @options[:alias].to_a.any?{|a|a==req_path}
     # if @full_route is empty at this point it's clearly not match
     return if @full_route.empty?
     # break up the input path into path fragments
-    input_fragments=input_path.cleanup('/').split('/')
+    req_path_fragments=req_path.cleanup('/').split('/')
     # break up this actions full_path into path fragments
     route_fragments=@full_route.split('/')
     # if the sizes don't match, then the paths don't match
-    return if route_fragments.size!=input_fragments.size
+    return if route_fragments.size!=req_path_fragments.size
     # offset for param index
     offset=0
     # move through each @full_route fragment
@@ -45,18 +47,18 @@ class Snap::Zone::Action < Snap::Zone::Event::Base
         # if there isn't a rule, setup a default rule
         regexp = @options[:rules][param] rescue /^\w+$/
         # if there is a match, increment the offset and save the value using the current param as the key
-        if regexp.match(input_fragments[index])
+        if regexp.match(req_path_fragments[index])
           offset+=1
-          local_values << local_params[param] = input_fragments[index]
+          local_values << local_params[param] = req_path_fragments[index]
         end
       # here there is a static/exact match - no param
-      elsif p == input_fragments[index]
-        local_values << input_fragments[index]
+      elsif p == req_path_fragments[index]
+        local_values << req_path_fragments[index]
         offset+=1
       end
     end
     # if there are still params after the new offset, then this isn't the right handler
-    return if input_fragments[offset..-1].size>0
+    return if req_path_fragments[offset..-1].size>0
     # merge the path params with the params set in the options when this action was defined
     local_params.merge!(@options[:params]) if @options[:params]
     true

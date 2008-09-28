@@ -11,7 +11,6 @@ module Snap::Zone
     
     attr_accessor :parent
     attr_reader :full_key, :key, :route, :full_route, :options, :block
-    attr_reader :response, :request
     
     # The matching action
     attr_reader :action
@@ -65,51 +64,21 @@ module Snap::Zone
       children << self.class.new(input_route, options, self, &block)
     end
     
-    def execute(request, response)
-      begin
-        halted_content = catch :halt do
-          run_safely do
-            @action=find_action(request, response)
-            @action.execute
-          end
-          nil
-        end
-        response.write halted_content if halted_content
-      rescue
-        if config.env == :production
-          response.status=500
-          response.body = ['Something has gone horribly wrong...']
-        else
-          raise $!
-        end
-      end
-      response.finish
-    end
-    
-    def run_safely
-      if config.mutex
-        mutex.synchronize { yield }
-      else
-        yield
-      end
-    end
-    
-    def mutex
-      @@mutex ||= Mutex.new
-    end
-    
-    def find_action(request, response, parent=nil)
+    #
+    #
+    #
+    def find_action(parent=nil)
       @full_route||=(parent ? [parent.full_route, @route].join('/') : @route).cleanup('/')
-      @request=request
-      @response=response
-      pi=request.path_info
       instance_eval &@block if @block
       children.each do |child|
-        a=child.find_action(request, response, self)
+        a=child.find_action(self)
         return a if a
       end
       actions.each do |a|
-        return a if a.match?(request.request_method, pi)
+        if a.match?
+          @action=a
+          return @action
+        end
       end
       nil
     end
