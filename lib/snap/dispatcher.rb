@@ -56,12 +56,12 @@ class Snap::Dispatcher
   # executes all after filters
   def execute_action_cycle(action, route_params)
     @request.params.merge!(route_params)
-    action.ns.befores.each do |cb|
-      app.instance_eval(&cb[:block])
+    @app.namespace.all_befores.each do |cb|
+      app.instance_eval(&cb[:block]) if action.ns.scoped_befores.include?(cb) || cb[:opts][:global]
     end
     @response.body = app.instance_eval(&action.block)
-    action.ns.afters.each do |cb|
-      app.instance_eval(&cb[:block])
+    @app.namespace.all_afters.each do |cb|
+      app.instance_eval(&cb[:block]) if action.ns.scoped_afters.include?(cb) || cb[:opts][:global]
     end
   end
   

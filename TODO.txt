@@ -1,0 +1,13 @@
+Remove rendering from app scope
+	
+	copy all instance variables from app, pass into "view" context binding
+
+before/after execution not correct. should be:
+	
+	before
+		before
+			action
+		after
+	after
+
+add :all=>true option to filters for executing before/after even for deeply nested actions

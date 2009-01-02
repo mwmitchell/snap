@@ -14,6 +14,14 @@ module Example
     
     start do
       
+      before :global=>true do
+        puts 'global before'
+      end
+      
+      before do
+        puts '/ before'
+      end
+      
       get do
         @title = 'HOME'
         render 'home'
@@ -24,6 +32,9 @@ module Example
       end
       
       namespace 'contact' do
+        before do
+          puts 'before /contact!'
+        end
         get{render 'contact'}
         post do
           throw :halt, 'Not working yet!'
