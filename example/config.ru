@@ -1,12 +1,12 @@
 require './example'
 
 require 'rubygems'
-require 'rack/cache'
 
 use Rack::CommonLogger, STDOUT
 use Rack::ShowExceptions
 use Rack::Reloader
 
+#require 'rack/cache'
 #use(Rack::Cache, {
 #  :verbose     => true,
 #  :metastore   => 'file:/tmp/cache/rack/meta',
