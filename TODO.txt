@@ -3,3 +3,5 @@ Remove rendering from app scope
 	copy all instance variables from app, pass into "view" context binding
 
 Code not-correctly reloading... all namespaces getting added for each request!
+
+Clean up before/after execution in Snap::Dispatcher
