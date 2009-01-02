@@ -11,18 +11,22 @@ module Example
     start do
       
       get do
-        'Snap Home'
+        render 'home'
+      end
+      
+      get 'config' do
+        Snap.config.inspect
       end
       
       namespace 'contact' do
-        get{'Contact'}
+        get{render 'contact'}
         post do
           throw :halt, 'Not working yet!'
         end
       end
       
       namespace 'snap' do
-        get {'Snap is a Ruby web framework'}
+        get {render 'snap'}
         get 'go' do
           redirect 'http://github.com/mwmitchell/snap'
         end

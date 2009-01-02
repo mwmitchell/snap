@@ -2,4 +2,4 @@
 A DSL-ish framework for building web applications in Ruby.
 
 ==Example
-See ./example.rb and config.ru
+See ./example

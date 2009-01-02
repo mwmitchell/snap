@@ -6,12 +6,8 @@
 # end
 module Snap::App::Renderer
   
-  # TODO: implement this thing
-  def render(*args)
-    opts = args.last.is_a?(Hash) ? args.pop : {}
-    opts[:template] ||= (
-      
-    )
+  def render(opts)
+    
   end
   
 end

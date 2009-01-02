@@ -2,15 +2,21 @@ require './example'
 
 require 'rubygems'
 
-use Rack::CommonLogger, STDOUT
-use Rack::ShowExceptions
 use Rack::Reloader
+use Rack::ShowStatus
 
-#require 'rack/cache'
-#use(Rack::Cache, {
-#  :verbose     => true,
-#  :metastore   => 'file:/tmp/cache/rack/meta',
-#  :entitystore => 'file:/tmp/cache/rack/body'
-#})
+Snap.env = env.to_s.to_sym if env
+
+Snap.configure do |config|
+  config[:view_paths] << 'blah' / 'blah' / 'blah'
+end
+
+Snap.configure :development do |config|
+  
+end
+
+Snap.configure :production do |config|
+  
+end
 
 run Snap::Rack::Runner.new(Example::Web)

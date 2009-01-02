@@ -5,6 +5,14 @@ class Symbol
   end
 end
 
+class String
+  
+  def /(next_path_fragment)
+    next_path_fragment.empty? ? self : [self, next_path_fragment].join('/')
+  end
+  
+end
+
 class Hash
   
   # @param *allowed<Array[(String, Symbol)]> The hash keys to include.
