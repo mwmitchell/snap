@@ -6,11 +6,16 @@ module Example
   class Web
     
     include Snap::App
-    include Snap::App::Renderer
+    
+    # override the main render method right inside the app...
+    def render(tpl, opts={})
+      super tpl, :layout=>'layout'
+    end
     
     start do
       
       get do
+        @title = 'HOME'
         render 'home'
       end
       

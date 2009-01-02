@@ -23,6 +23,8 @@ module Snap::App
   # "instance" methods...
   #
   
+  include Snap::App::Renderer
+  
   attr :request
   attr :response
   

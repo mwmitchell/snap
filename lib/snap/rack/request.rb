@@ -12,7 +12,8 @@ class Snap::Rack::Request < Rack::Request
     end
     
     def default_format
-      accept_encoding || :html
+      # should be checking accept header here
+      :html
     end
     
     def format
