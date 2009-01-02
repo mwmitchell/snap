@@ -22,28 +22,8 @@ class Snap::App::Namespace
   end
   
   # gets all descendant actions
-  def all_actions
-    (actions + [children.map(&:all_actions)]).flatten
-  end
-  
-  # the entire "befores" array
-  def all_befores
-    (befores + [children.map(&:all_befores)]).flatten
-  end
-  
-  # the entire "afters" array
-  def all_afters
-    (afters + [children.map(&:all_afters)]).flatten
-  end
-  
-  # ancestor befores
-  def scoped_befores
-    ([ancestors.reverse.map(&:scoped_befores)] + befores).flatten
-  end
-  
-  # ancestor afters
-  def scoped_afters
-    ([ancestors.map(&:scoped_afters)] + afters).flatten
+  def descendants
+    (children + [children.map(&:children)]).flatten
   end
   
   # creates a child namespace

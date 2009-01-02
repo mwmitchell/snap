@@ -56,12 +56,16 @@ class Snap::Dispatcher
   # executes all after filters
   def execute_action_cycle(action, route_params)
     @request.params.merge!(route_params)
-    @app.namespace.all_befores.each do |cb|
-      app.instance_eval(&cb[:block]) if action.ns.scoped_befores.include?(cb) || cb[:opts][:global]
+    all_befores = (action.ns.ancestors.map(&:befores).reverse + action.ns.befores).flatten
+    all_befores.each do |cb|
+      app.instance_eval(&cb[:block]) if action.ns.befores.include?(cb) || cb[:opts][:global]
     end
+    
     @response.body = app.instance_eval(&action.block)
-    @app.namespace.all_afters.each do |cb|
-      app.instance_eval(&cb[:block]) if action.ns.scoped_afters.include?(cb) || cb[:opts][:global]
+    
+    all_afters = (action.ns.afters + action.ns.ancestors.map(&:afters)).flatten
+    all_afters.each do |cb|
+      app.instance_eval(&cb[:block]) if action.ns.afters.include?(cb) || cb[:opts][:global]
     end
   end
   
@@ -69,7 +73,8 @@ class Snap::Dispatcher
   # returns the action and route-params-hash in an array
   def find_action
     route_params = {}
-    action = app.namespace.all_actions.detect do |action|
+    actions = (@app.namespace.descendants.map(&:actions) + @app.namespace.actions).flatten
+    action = actions.detect do |action|
       if action.request_method == @request.request_method and 
         (route_params = Snap::Router.match(@request.path_info, action.full_route, action.opts))
         true

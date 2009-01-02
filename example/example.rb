@@ -15,11 +15,11 @@ module Example
     start do
       
       before :global=>true do
-        puts 'global before'
+        puts 'before /'
       end
       
-      before do
-        puts '/ before'
+      after :global=>true do
+        puts 'after /'
       end
       
       get do
@@ -34,6 +34,9 @@ module Example
       namespace 'contact' do
         before do
           puts 'before /contact!'
+        end
+        after do
+          puts 'after /contact'
         end
         get{render 'contact'}
         post do
