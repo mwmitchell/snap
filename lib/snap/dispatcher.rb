@@ -11,42 +11,25 @@ class Snap::Dispatcher
   # builds the app's actions/routes
   # finds the appropriate action based on path_info and the request method
   # executes the execute_action_cycle method
-  # returns the value from Rack::Response.finish
-  def execute(req, res)
-    @request = req
-    @response = res
-    app.build(@request, @response)
-    action, route_params = find_action
-    if action and route_params
-      execute_action_cycle(action, route_params)
-    else
-      app.not_found
-    end
-    res.finish
-  end
-  
-  protected
-  
-  # merges the route params to the request params
-  # within a catch(:halt) block...
-  # runs all before filters
-  # executes the action, setting the return value to @response.body
-  # executes all after filters
+  #
   # if :halt is thrown,
   # the return value from #catch (second arg in throw)
   # is inspected and if the value is a
   #   String: the value of the string becomes the response body
   #   Proc: the proc is execute within the app scope
   #   Hash: The keys of the hash are sent to the response
-  def execute_action_cycle(action, route_params)
-    @request.params.merge!(route_params)
+  #
+  # returns the value from Rack::Response.finish
+  def execute(req, res)
+    @request = req
+    @response = res
+    app.build(@request, @response)
+    action, route_params = find_action
     caught = catch(:halt) do
-      action.ns.befores.each do |cb|
-        app.instance_eval(&cb[:block])
-      end
-      @response.body = app.instance_eval(&action.block)
-      action.ns.afters.each do |cb|
-        app.instance_eval(&cb[:block])
+      if action and route_params
+        execute_action_cycle(action, route_params)
+      else
+        app.not_found
       end
     end
     if caught
@@ -60,6 +43,25 @@ class Snap::Dispatcher
           @response.send("#{k}=", v)
         end
       end
+    end
+    res.finish
+  end
+  
+  protected
+  
+  # merges the route params to the request params
+  # within a catch(:halt) block...
+  # runs all before filters
+  # executes the action, setting the return value to @response.body
+  # executes all after filters
+  def execute_action_cycle(action, route_params)
+    @request.params.merge!(route_params)
+    action.ns.befores.each do |cb|
+      app.instance_eval(&cb[:block])
+    end
+    @response.body = app.instance_eval(&action.block)
+    action.ns.afters.each do |cb|
+      app.instance_eval(&cb[:block])
     end
   end
   

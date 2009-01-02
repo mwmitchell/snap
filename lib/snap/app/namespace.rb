@@ -1,7 +1,7 @@
 #
 # The Namespace class is a container for actions and before/after filters
 # It can contain child Namespaces and can have a parent Namespace
-# It's block is executed within it's own scope, NOT the app
+# Its block is executed within its own scope, NOT the app
 #   HINT: if you want to always execute some app code for a namespaced route, do it in a before/after filter!
 #         Executing code within the Namespace block will not give you access to the app
 #
