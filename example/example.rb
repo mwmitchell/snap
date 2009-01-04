@@ -14,16 +14,12 @@ module Example
     
     start do
       
-      before :global=>true do
-        puts 'before /'
-      end
-      
-      after :global=>true do
-        puts 'after /'
+      before :all=>true do
+        @title = 'Blah!'
       end
       
       get do
-        @title = 'HOME'
+        @title ||= 'HOME'
         render 'home'
       end
       

@@ -7,15 +7,15 @@ use Rack::ShowStatus
 
 Snap.env = env.to_s.to_sym if env
 
-Snap.configure do |config|
+Snap::Config.configure do |config|
   config[:view_paths] << 'blah' / 'blah' / 'blah'
 end
 
-Snap.configure :development do |config|
+Snap::Config.configure :development do |config|
   
 end
 
-Snap.configure :production do |config|
+Snap::Config.configure :production do |config|
   
 end
 

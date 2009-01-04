@@ -21,11 +21,6 @@ class Snap::App::Namespace
     instance_eval(&@block) and children.each{|child|child.execute(scope)}
   end
   
-  # gets all descendant actions
-  def descendants
-    (children + [children.map(&:children)]).flatten
-  end
-  
   # creates a child namespace
   # namespace 'texts' do
   #   
@@ -55,13 +50,29 @@ class Snap::App::Namespace
     @parent ? [@parent] + @parent.ancestors : []
   end
   
-  # calculates the full route: parent routes + this route
+  # gets all descendant actions
+  def descendants
+    children + children.map(&:children).flatten
+  end
+  
+  # calculates the full route: all parent routes + this route
   def full_route
-    if @parent
-      routes = ancestors.reverse.map(&:route)
-      (routes + [@route]).join('/').squeeze('/')
+    @parent ? (ancestors.reverse + [self]).map(&:route).join('/').squeeze('/') : route
+  end
+  
+  # returns the filter chain for :before or :after type filters
+  # the :before ordering is top down to self
+  # the :after ordering is self/bottom up to the root namespace
+  def filters(type)
+    case type
+    when :before
+      namespaces = self.ancestors + [self]
+      namespaces.map(&:befores).flatten
+    when :after
+      namespaces = [self] + self.ancestors.reverse
+      namespaces.map(&:afters).flatten
     else
-      route
+      raise 'Invalid filter type. Use :before or :after'
     end
   end
   

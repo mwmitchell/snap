@@ -14,11 +14,14 @@ class AppNamespaceTest < SnapCase
     ns.execute(self)
     assert_equal 1, ns.children.size
     assert_equal 1, ns.children.first.children.size
-    assert_equal 0, ns.all_actions.size
+    assert_equal 2, ns.descendants.size
     assert_equal 0, ns.ancestors.size
+    #
+    assert_equal 0, ns.descendants.map(&:actions).flatten.size
     #
     id_namespace = ns.children.first.children.first
     assert_equal ':id', id_namespace.route
+    assert_equal 2, id_namespace.ancestors.size
     assert_equal 'admin/products/:id', id_namespace.full_route
   end
   
@@ -36,7 +39,7 @@ class AppNamespaceTest < SnapCase
       end
     end
     ns.execute(self)
-    assert_equal 6, ns.all_actions.size
+    assert_equal 6, (ns.actions + ns.descendants.map(&:actions).flatten).size
   end
   
 end

@@ -25,8 +25,7 @@ module Snap::App
   
   include Snap::App::Renderer
   
-  attr :request
-  attr :response
+  attr_reader :request, :response
   
   # #build must be called before the app can be used.
   # It sets the request and response variables
