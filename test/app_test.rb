@@ -40,9 +40,8 @@ class AppTest < SnapCase
     res = response
     app = MainApp.new
     
-    # not yet created...
-    assert_nil app.actions
-    assert_nil app.namespaces
+    assert_equal 0, app.actions.size
+    assert_equal 0, app.namespaces.size
     
     dispatcher = Snap::Dispatcher.new(app)
     new_response = dispatcher.execute(req, res)

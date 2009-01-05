@@ -1,6 +1,14 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 class AppNamespaceTest < SnapCase
   
+  class MyApp
+    include Snap::App
+  end
+  
+  def my_app
+    MyApp.new
+  end
+  
   def test_routes
     ns = Snap::App::Namespace::Base.new('admin') do
       namespace 'products' do
@@ -11,7 +19,7 @@ class AppNamespaceTest < SnapCase
     end
     assert_equal 'admin', ns.route
     assert_equal 'admin', ns.full_route
-    ns.execute(self)
+    ns.execute(my_app)
     assert_equal 1, ns.children.size
     assert_equal 1, ns.children.first.children.size
     assert_equal 2, ns.descendants.size
@@ -38,7 +46,7 @@ class AppNamespaceTest < SnapCase
         end
       end
     end
-    ns.execute(self)
+    ns.execute(my_app)
     assert_equal 6, (ns.actions + ns.descendants.map(&:actions).flatten).size
   end
   

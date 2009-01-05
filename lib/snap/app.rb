@@ -28,6 +28,14 @@ module Snap::App
   
   attr_reader :request, :response, :namespaces, :actions
   
+  def actions
+    @action||=[]
+  end
+  
+  def namespaces
+    @namespaces||=[]
+  end
+  
   # #build must be called before the app can be used.
   # It sets the request and response variables
   # then creates all of the routes/actions
