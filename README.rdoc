@@ -3,7 +3,50 @@ A DSL-ish framework for building web applications in Ruby.
 
 ==Example
   require '../lib/snap'
-
+  
+  module AdminWeb
+    
+    include Snap::App
+    
+    start do
+      
+      get{render 'admin'}
+      
+      namespace 'posts' do
+      
+        get do
+          @posts = Post.all
+          render 'admin/posts'
+        end
+        
+        post do
+          @post = Post.new(params[:post])
+          # ...
+          redirect namespace.full_route
+        end
+        
+        namespace ':id' do
+          
+          # /admin/post/:id
+          get do
+            @post = Post.find(params[:id])
+            render 'admin/post'
+          end
+          
+          # /admin/post/:id/edit
+          get 'edit' do
+            @post = Post.find(params[:id])
+            render 'admin/post_edit'
+          end
+          
+        end
+          
+      end
+      
+    end
+    
+  end
+  
   module Example
     
     class Web
@@ -28,38 +71,7 @@ A DSL-ish framework for building web applications in Ruby.
         
         namespace 'admin' do
           
-          get{render 'admin'}
-          
-          namespace 'posts' do
-          
-            get do
-              @posts = Post.all
-              render 'admin/posts'
-            end
-            
-            post do
-              @post = Post.new(params[:post])
-              # ...
-              redirect namespace.full_route
-            end
-            
-            namespace ':id' do
-              
-              # /admin/post/:id
-              get do
-                @post = Post.find(params[:id])
-                render 'admin/post'
-              end
-              
-              # /admin/post/:id/edit
-              get 'edit' do
-                @post = Post.find(params[:id])
-                render 'admin/post_edit'
-              end
-              
-            end
-            
-          end
+          use Admin::Web
           
         end
         
