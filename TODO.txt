@@ -1,20 +1,20 @@
-Remove rendering from app scope
+overkill? -- Remove rendering from app scope
 	
 	copy all instance variables from app, pass into "view" context binding
 
-Code not-correctly reloading... all namespaces getting added for each request!
+DONE - Code not-correctly reloading... all namespaces getting added for each request!
 
-find a way to pass app to all app participants? (action, namespace etc.)
+DONE (onl for namespaces) - find a way to pass app to all app participants? (action, namespace etc.)
 
-change app.namespace to app.root_namespace
+DONE (app now has app.namespaces) - change app.namespace to app.root_namespace
 
 have dispatcher act on proc response objects, or anything with a call method. You could save rendering until after the last :after filter has executed. Could give some interesting possibilities?
 
-Have Snap/config know what app is currently running? Is there ever a possibility that more than one app will be running on the same instance of Snap? In the same process?
+NO - Have Snap/config know what app is currently running? Is there ever a possibility that more than one app will be running on the same instance of Snap? In the same process?
 
 Change Action.ns to Action.namespace and raise an exception if a block is used.
 
-Move configuration stuff out of the Snap module and into a Config module
+DONE - Move configuration stuff out of the Snap module and into a Config module
 
 get request :format from accept type header, not just the url file extension
 
@@ -26,8 +26,8 @@ Register template engines + extensions ? How do you know when a .haml template s
 	text/css => .css => Sass
 
 Scope:
-	actions should be in the app instance scope
-	before filters should have same scope as app instance
+	DONE - actions should be in the app instance scope
+	DONE - before filters should have same scope as app instance
 	overkill? -> the template binding/scope should be similar to the action scope, except access only to variables, app, request and helper methods.
 		copy app variables to view scope
 		method_missing in view scope object for dispatching to app methods?

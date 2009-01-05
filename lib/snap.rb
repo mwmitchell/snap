@@ -14,6 +14,8 @@ module Snap
   autoload :Router, 'snap/router'
   autoload :Config, 'snap/config'
   
+  # @env is the current app environment, :development by default
+  # @root is the file path to the running app directory
   class << self
     attr_accessor :env, :root
   end

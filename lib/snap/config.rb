@@ -5,7 +5,7 @@ module Snap::Config
   end
   
   @default_settings = {
-    :view_paths => [Snap.root / 'views']
+    :view_paths => [File.join(Snap.root, 'views')]
   }
   
   @config_blocks = {}

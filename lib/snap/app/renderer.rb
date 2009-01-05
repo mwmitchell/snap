@@ -24,7 +24,7 @@ module Snap::App::Renderer
   
   def search_view_paths(template_name)
     Snap.config[:view_paths].detect do |path|
-      tpl = path / template_name
+      tpl = File.join(path, template_name)
       return tpl if File.exists?(tpl)
     end
     false

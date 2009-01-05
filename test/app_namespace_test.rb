@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'test_helper')
 class AppNamespaceTest < SnapCase
   
   def test_routes
-    ns = Snap::App::Namespace.new('admin') do
+    ns = Snap::App::Namespace::Base.new('admin') do
       namespace 'products' do
         namespace ':id' do
           
@@ -26,7 +26,7 @@ class AppNamespaceTest < SnapCase
   end
   
   def test_actions
-    ns = Snap::App::Namespace.new 'admin' do
+    ns = Snap::App::Namespace::Base.new 'admin' do
       get{}
       post{}
       delete{}

@@ -5,6 +5,7 @@ class Symbol
   end
 end
 
+=begin
 class String
   
   def /(next_path_fragment)
@@ -42,3 +43,4 @@ class Hash
   end
   
 end
+=end

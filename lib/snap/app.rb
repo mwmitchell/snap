@@ -10,11 +10,12 @@ module Snap::App
   
   module ClassMethods
     
-    attr_reader :namespace
+    attr_reader :start_block, :start_opts
     
     # Call this method with a block to start building your app
     def start(opts={}, &block)
-      @namespace = Snap::App::Namespace.new '/', opts, &block
+      @start_block = block
+      @start_opts = opts
     end
     
   end
@@ -25,15 +26,18 @@ module Snap::App
   
   include Snap::App::Renderer
   
-  attr_reader :request, :response
+  attr_reader :request, :response, :namespaces, :actions
   
   # #build must be called before the app can be used.
   # It sets the request and response variables
   # then creates all of the routes/actions
   def build(request, response)
+    @actions = []
+    @namespaces = []
     @request = request
     @response = response
-    namespace.execute(self)
+    @namespaces << Snap::App::Namespace::Base.new('/', self.class.start_opts, &self.class.start_block)
+    @namespaces.first.execute(self)
   end
   
   def filters_halted
@@ -50,11 +54,6 @@ module Snap::App
   
   def params
     @request.params
-  end
-  
-  # the root namespace of the app (where all of the top-level actions and before/after filters are)
-  def namespace
-    self.class.namespace
   end
   
 end
