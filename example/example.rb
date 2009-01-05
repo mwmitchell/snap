@@ -1,6 +1,16 @@
 
 require '../lib/snap'
 
+module ExtApp
+  
+  include Snap::App
+  
+  start do
+    get {'from ExtApp'}
+  end
+  
+end
+
 module Example
   
   class Web
@@ -15,6 +25,8 @@ module Example
     end
     
     start do
+      
+      use ExtApp
       
       before :all=>true do
         @title = 'Blah!'

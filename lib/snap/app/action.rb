@@ -1,6 +1,7 @@
 class Snap::App::Action
   
-  attr_reader :ns, :request_method, :route, :opts, :block
+  attr_accessor :ns
+  attr_reader :request_method, :route, :opts, :block
   
   def initialize(ns, request_method, route, opts={}, &block)
     @ns, @request_method, @route, @opts, @block = ns, request_method, route, opts, block

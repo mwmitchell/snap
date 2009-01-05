@@ -1,3 +1,9 @@
+Bring in the use method within namespaces to make reusable apps:
+	
+	namespace 'contact' do
+		use MyContactApp
+	end
+
 overkill? -- Remove rendering from app scope
 	
 	copy all instance variables from app, pass into "view" context binding

@@ -19,6 +19,20 @@ module Snap::App::Namespace
       end
     end
     
+    #
+    def use(app_klass)
+      mixin app_klass.new
+    end
+    
+    #
+    def mixin(app_instance)
+      app_instance.build(@app.request, @app.response)
+      app_instance.namespaces.each do |ns|
+        self.namespace(ns.route, ns.opts, &ns.block)
+      end
+      app_instance
+    end
+    
     def actions
       @actions||=[]
     end
